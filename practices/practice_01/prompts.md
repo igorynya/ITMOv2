@@ -5,9 +5,54 @@
 | ID | Артефакт и цель | Инструмент / модель | Тип промпта | Запрос или ссылка на него | Результат или ссылка | Что приняли | Что отклонили или исправили | Как проверили |
 |---|---|---|---|---|---|---|---|---|
 | P1-01 | Baseline-ревью `TRAINING_PR.diff` | OpenCode (openai/gpt-5) | zero-shot | Запрос: "Посмотри PR и найди проблемы". Файл: [TRAINING_PR.diff](TRAINING_PR.diff) | Краткий список рисков с ссылками на строки diff | Приняты риски 1-3 (см. ниже) | Убрали предположения вне diff | Сопоставили с `TRAINING_PR.diff` |
+| P1-02 | Заполнение артефактов по README | OpenCode (openai/gpt-5) | structured | Контракт master prompt (см. ниже) | Обновлены context/problem/analysis/... | Приняты только факты из diff | Исключены новые правила | Сверка с README и TRAINING_PR.diff |
 
-## Master Prompt v1
+## Master Prompt v2
 
+```
+Role: AI-reviewer и создатель документации
+Inputs: @practices/practice_01/TRAINING_PR.diff @README.md 
+return: суммарный отчет + найди опасные места и опиши их, сделай проверку
+Risk: верни название файла и номер строки внутри этого файла, где ты обнаружил опасные места, напиши небольшой отчет по каждому риску: в чем опасно и как пофиксить
+Approve:
+1. Можешь использовать только файлы внутри папки /practices/practice_01
+2. ничего не заливай в git
+3. Не придумывай никаких файлов, данных и правил, все только на основании входного файла и промпта.
+Flow: 
+1. Изучи файл @practices/practice_01/TRAINING_PR.diff и найди опасные места, риски и тд
+2. сформируй отчет по этим рискам, где ты покажешь, в каком месте ошибка/риск, почему это опасно и как исправить
+3. Перед заполнением файла проверь, что твой ответ соответствует криетрям заполнения именно этого файла, а также общим критериям заполнения файла.
+4. Поочередно заполни файлы указанные в OUTPUT (учитывай условия/("что в них должно быть") написанные в файле @README.md для каждого файла
+candidate -> evidence -> check
+Нет evidence -> пропусти
+Done: evidence + check for all riscs
+Правила: отчет заполняй на русском, а также отвечай мне тоже на русском
+OUTPUT: Заполни файлы:
+- @practices/practice_01/context.md (AS IS: продуктовый и командный контекст, источники и ограничения)
+- @practices/practice_01/problem.md (пользователь, проблема и измеримые продуктовые метрики)
+- @practices/practice_01/analysis.md (AS IS и TO BE процесса в выбранной нотации)
+- @practices/practice_01/product_management.md (use cases, user stories и сценарии)
+- @practices/practice_01/project_management.md (инкременты, роли людей/AI и план поставки)
+- @practices/practice_01/adr.md (архитектурное решение и Mermaid-схема)
+- @practices/practice_01/tests_unit.md (unit-проверки)
+- @practices/practice_01/tests_integration.md (integration-проверки)
+- @practices/practice_01/tests_load.md (нагрузочные проверки и ожидаемые пределы)
+- @practices/practice_01/tests_e2e.md (сквозные сценарии)
+- @practices/practice_01/prompts.md (запросы, результаты, ссылки на изменённые артефакты и собственная оценк)
+Для заполнения файлов используй информация, прикрепленную мной после каждого файла, а также поля внутри каждого файла.Там написано, что и куда нужно писать.
+```
+### Список рисков (candidate -> evidence -> check)
+1. Candidate: Нет валидации входа и обработчика ошибок в POST /api/reviews.
+   Evidence: app/api.py, строки 35–38 — `create_review(payload: dict)` обращается к `payload["diff"]` без проверки; возврат напрямую из сервиса.
+   Check: Запрос `{}` → (AS IS) 500; (TO BE) 422/400.
+
+2. Candidate: Нет обработки исключений и деградации при сбоях LLM.
+   Evidence: app/review_service.py, строки 19–22 — `self.llm.generate(prompt)` без try/except; API также не перехватывает [app/api.py, 35–38].
+   Check: Смоделировать исключение из LLM → (AS IS) 5xx без маппинга; (TO BE) 502/503.
+
+3. Candidate: Prompt injection/перегруз LLM за счёт неконтролируемого diff.
+   Evidence: app/review_service.py, строки 19–22 — дифф вставляется в промпт без ограничений.
+   Check: Длинный или вредоносный diff → (TO BE) отказ или усечение; отсутствие влияния инъекции на системные инструкции.
 ```
 Role: AI-reviewer. INPUTS: @practices/practice_01/TRAINING_PR.diff. RETURN:summary in russian language, заполни файлы @practices/practice_01/context.md, @practices/practice_01/problem.md, @practices/practice_01/prompts.md. Forbidden: Check PR and summary riscs and error, заполнив файлы, которые я тебе дал on russian language, stop if you find 3 riscs. Не придумывай правила. Flow: candidate -> evidence -> check. Нет evidence -> check. Done: evidence + check для каждого риска и заполненные файлы
 ```
