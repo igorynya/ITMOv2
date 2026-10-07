@@ -1,1 +1,1 @@
-
+ANSWER: {"text": "Запуск тестов: make test → python3 -m unittest -v", "sources": ["practices/practice_03/lab/demo/Makefile:3", "practices/practice_03/lab/Makefile:5"]}
