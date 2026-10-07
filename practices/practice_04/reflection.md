@@ -16,3 +16,4 @@
 - [README.md (MCP)](../../tools/practice-04-checklist/README.md) — документация MCP: назначение, API, установка и интеграция.
 - [AGENTS.md](../../AGENTS.md) — правила агента: политика редактирования, проверки, использование skills/MCP.
 - [reflection.md](./reflection.md) — этот файл с выводами и ссылками.
+- [hook_report.md](./evidence/checks/hook_report.md) — отчёт по hook: как он запускает strict‑checklist перед коммитом и где смотреть логи.
