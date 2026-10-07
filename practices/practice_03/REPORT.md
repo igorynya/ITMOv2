@@ -29,16 +29,16 @@ Ollama или LM Studio / OpenCode / Python, версии:
 
 | Разработчик / модель | Задача | Параметры / формат | Лицензия | Язык / tools | Источник |
 |---|---|---|---|---|---|
-| | | | | | |
-| | | | | | |
+| Alibaba Qwen / qwen2.5:1.5b-instruct | Инструкции, чтение локальных файлов | 1.5B / gguf (Q4_K_M) | не подтверждено | ru/en / tools: да | локальный Ollama, карточка модели |
+| ITMO (локальный) / itmo-agent (на базе qwen2.5:1.5b) | Локальный ассистент | 1.5B / gguf (Q4_K_M) | не подтверждено | ru/en / tools: да | локальный Ollama, карточка модели |
 
 ## Воспроизведение
 
 Команды и файлы конфигурации:
 - Локальные промпты и агенты для тестовых сессий: practices/practice_03/lab/demo/repo-system.txt (A), repo-system-b.txt (B)
-- Скрипт прогонов A/B: practices/practice_03/lab/run_opencode_ab.py (stdlib)
 - Модель: qwen2.5:1.5b-instruct через Ollama (http://localhost:11434)
-- Команда запуска одиночной сессии: opencode run "<вопрос>" --agent local-guide-{a|b} --pure --format json --print-logs (из каталога lab/demo)
+- Запуски выполнялись вручную: opencode run "<вопрос>" --agent local-guide-{a|b} --pure --format json --print-logs (из каталога lab/demo)
+- Ответы и логи сохранены в practices/practice_03/lab/results/(A|B)/q*/asnwer и logs.txt
 
 Подтверждение локального endpoint и скачанных весов:
 - GET http://localhost:11434/api/tags вернул список моделей, включая qwen2.5:1.5b-instruct (digest 65ec06548149..., Q4_K_M)
@@ -62,11 +62,11 @@ Ollama или LM Studio / OpenCode / Python, версии:
 
 | Вопрос | Эталон и file:line | Ответ A | Ответ B | Верно A/B | Наблюдение инструментов |
 |---|---|---|---|---|---|
-| 1. Как запустить тесты? | make test -> python3 -m unittest -v; demo/Makefile:3; lab/Makefile:5 | см. results | см. results | TBD | read demo/Makefile |
-| 2. Пустое имя подписчика | ValueError("empty name"); service.py:5-6; test_service.py:13-15 | см. results | см. results | TBD | read service.py/test_service.py |
-| 3. Где реализован unsubscribe? | В предоставленных материалах нет ответа | см. results | см. results | TBD | glob по service.py |
-| 4. Какая CI запускает тесты? | В предоставленных материалах нет ответа | см. results | см. results | TBD | поиск по репозиторию |
-| 5. Сохраняются ли подписки? | Нет; set в памяти процесса; service.py:1,4,7; README.md:2 | см. results | см. results | TBD | read service.py/README.md |
+| 1. Как запустить тесты? | make test -> python3 -m unittest -v; demo/Makefile:3; lab/Makefile:5 | ANSWER: make test → python3 -m unittest -v; источники: demo/Makefile:3, lab/Makefile:5 | ANSWER: make test → python3 -m unittest -v; источники: demo/Makefile:3, lab/Makefile:5 | Да/Да | read demo/Makefile, read lab/Makefile |
+| 2. Пустое имя подписчика | ValueError("empty name"); service.py:5-6; test_service.py:13-15 | ANSWER: ValueError("empty name"); источники: service.py:5-6, test_service.py:13-15 | ANSWER: ValueError("empty name"); источники: service.py:5-6, test_service.py:13-15 | Да/Да | read service.py; read test_service.py |
+| 3. Где реализован unsubscribe? | В предоставленных материалах нет ответа | ANSWER: В предоставленных материалах нет ответа | ANSWER: В предоставленных материалах нет ответа | Да/Да | glob по service.py; отсутствует функция |
+| 4. Какая CI запускает тесты? | В предоставленных материалах нет ответа | ANSWER: В предоставленных материалах нет ответа | ANSWER: В предоставленных материалах нет ответа | Да/Да | поиск по репозиторию, файлов CI нет |
+| 5. Сохраняются ли подписки? | Нет; set в памяти процесса; service.py:1,4,7; README.md:2 | ANSWER: Не сохраняются; set в памяти процесса; источники: service.py:1,4,7; README.md:2 | ANSWER: Не сохраняются; set в памяти процесса; источники: service.py:1,4,7; README.md:2 | Да/Да | read service.py; read README.md |
 
 ## Скорость
 
