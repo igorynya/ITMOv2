@@ -1,0 +1,6 @@
+{
+  "wall_seconds": 3.5568669170024805,
+  "units": "seconds",
+  "note": "cold single-shot with one retry allowed on UnknownError",
+  "error_ref": "err_63045b2b"
+}
