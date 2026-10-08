@@ -1,0 +1,15 @@
+{
+  "ok": true,
+  "summary": "OK=8, FAIL=1, SKIP=0; strict=off",
+  "items": [
+    {"check":"AGENTS.md","status":"OK","path":"AGENTS.md"},
+    {"check":"skills.any","status":"OK","details":"found>=1"},
+    {"check":"skill.humanizer-zh","status":"OK"},
+    {"check":"skill.todo","status":"OK"},
+    {"check":"opencode.skills.paths","status":"OK"},
+    {"check":"opencode.instructions","status":"OK"},
+    {"check":"opencode.mcp","status":"OK"},
+    {"check":"reflection.md","status":"FAIL"},
+    {"check":"evidence.todo-report","status":"OK"}
+  ]
+}

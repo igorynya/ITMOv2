@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+set -eo pipefail
+
+# Pre-commit hook: run Practice 4 checklist in strict mode
+# Exits non-zero if checklist reports any FAILs.
+
+ROOT_DIR=$(git rev-parse --show-toplevel)
+CHECK_SCRIPT="$ROOT_DIR/scripts/check.sh"
+
+if [[ ! -x "$CHECK_SCRIPT" ]]; then
+  echo "check script not found or not executable: $CHECK_SCRIPT" >&2
+  exit 1
+fi
+
+"$CHECK_SCRIPT"
