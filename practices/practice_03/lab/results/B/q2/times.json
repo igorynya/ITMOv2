@@ -1,0 +1,11 @@
+{
+  "wall_seconds": [
+    0.950941832998069,
+    0.8677337080007419,
+    0.9627591249882244
+  ],
+  "median_seconds": 0.950941832998069,
+  "units": "seconds",
+  "note": "three warm runs; separate warmup executed once per track; one retry allowed on UnknownError; up to 2 extra attempts to capture formatted answer",
+  "retries": []
+}
