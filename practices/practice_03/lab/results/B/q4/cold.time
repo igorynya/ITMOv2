@@ -1,0 +1,34 @@
+timestamp=2026-10-07T11:42:24.118Z level=INFO run=7426d05a message="creating instance" directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo
+timestamp=2026-10-07T11:42:24.140Z level=INFO run=7426d05a message=fromDirectory directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo
+timestamp=2026-10-07T11:42:26.040Z level=INFO run=7426d05a message=bootstrapping directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo
+timestamp=2026-10-07T11:42:26.100Z level=INFO run=7426d05a message=loading path=/Users/igoratroskin/.config/opencode/config.json
+timestamp=2026-10-07T11:42:26.116Z level=INFO run=7426d05a message=loading path=/Users/igoratroskin/.config/opencode/opencode.json
+timestamp=2026-10-07T11:42:26.117Z level=INFO run=7426d05a message=loading path=/Users/igoratroskin/.config/opencode/opencode.jsonc
+timestamp=2026-10-07T11:42:26.142Z level=INFO run=7426d05a message=loading path=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/opencode.json
+timestamp=2026-10-07T11:42:26.151Z level=INFO run=7426d05a message=loading path=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo/opencode.json
+timestamp=2026-10-07T11:42:26.361Z level=INFO run=7426d05a message=loading path=/Users/igoratroskin/.opencode/opencode.json
+timestamp=2026-10-07T11:42:26.362Z level=INFO run=7426d05a message=loading path=/Users/igoratroskin/.opencode/opencode.jsonc
+timestamp=2026-10-07T11:42:26.677Z level=INFO run=7426d05a message="all LSPs are disabled"
+timestamp=2026-10-07T11:42:26.683Z level=INFO run=7426d05a message="all formatters are disabled"
+timestamp=2026-10-07T11:42:26.683Z level=INFO run=7426d05a message=init
+timestamp=2026-10-07T11:42:27.817Z level=INFO run=7426d05a message=created id=ses_ee9d3f417ffekuEztG1Lw4SIVj slug=kind-falcon version=1.18.34 projectID=caf0ec731057f328c719b986ce12ad0144cfc306 directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo path=practices/practice_03/lab/demo workspaceID=undefined parentID=undefined title="New session - 2026-10-07T11:42:27.817Z" agent=undefined model=undefined metadata=undefined permission="[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"}]" cost=0 tokens.input=0 tokens.output=0 tokens.reasoning=0 tokens.cache.read=0 tokens.cache.write=0 time.created=1791373347817 time.updated=1791373347817
+timestamp=2026-10-07T11:42:28.308Z level=INFO run=7426d05a message="event connected"
+timestamp=2026-10-07T11:42:29.732Z level=INFO run=7426d05a message=loop session.id=ses_ee9d3f417ffekuEztG1Lw4SIVj step=0
+timestamp=2026-10-07T11:42:29.760Z level=INFO run=7426d05a message=stream providerID=ollama modelID=qwen2.5:1.5b-instruct session.id=ses_ee9d3f417ffekuEztG1Lw4SIVj small=true agent=title mode=primary
+timestamp=2026-10-07T11:42:29.794Z level=INFO run=7426d05a message="llm runtime selected" llm.runtime=ai-sdk llm.provider=ollama llm.model=qwen2.5:1.5b-instruct
+timestamp=2026-10-07T11:42:30.120Z level=INFO run=7426d05a message=tracking hash=a14859846fdaa03c37e7b2cbddd9c7223d9dd981 cwd=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo git=/Users/igoratroskin/.local/share/opencode/snapshot/caf0ec731057f328c719b986ce12ad0144cfc306/f320ebc19dba0c0debf1e16294420ea74c703fbb
+timestamp=2026-10-07T11:42:30.140Z level=INFO run=7426d05a message="shell tool using shell" shell=/bin/zsh
+timestamp=2026-10-07T11:42:33.852Z level=INFO run=7426d05a message="watcher backend" directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo platform=darwin backend=fs-events
+timestamp=2026-10-07T11:42:34.110Z level=INFO run=7426d05a message="project copy refresh started" projectID=caf0ec731057f328c719b986ce12ad0144cfc306
+timestamp=2026-10-07T11:42:36.748Z level=INFO run=7426d05a message="project copy refresh done" projectID=caf0ec731057f328c719b986ce12ad0144cfc306 updated=[] removed=[]
+timestamp=2026-10-07T11:42:37.758Z level=INFO run=7426d05a message="booting location services" directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo workspaceID=undefined
+timestamp=2026-10-07T11:42:37.845Z level=INFO run=7426d05a message=process session.id=ses_ee9d3f417ffekuEztG1Lw4SIVj messageID=msg_1162c136c001i28CHolO9r5jNm
+timestamp=2026-10-07T11:42:37.849Z level=INFO run=7426d05a message=stream providerID=ollama modelID=qwen2.5:1.5b-instruct session.id=ses_ee9d3f417ffekuEztG1Lw4SIVj small=false agent=local-guide-b mode=primary
+timestamp=2026-10-07T11:42:37.904Z level=INFO run=7426d05a message="llm runtime selected" llm.runtime=ai-sdk llm.provider=ollama llm.model=qwen2.5:1.5b-instruct
+timestamp=2026-10-07T11:42:41.210Z level=INFO run=7426d05a message=tracking hash=a14859846fdaa03c37e7b2cbddd9c7223d9dd981 cwd=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo git=/Users/igoratroskin/.local/share/opencode/snapshot/caf0ec731057f328c719b986ce12ad0144cfc306/f320ebc19dba0c0debf1e16294420ea74c703fbb
+timestamp=2026-10-07T11:42:42.163Z level=INFO run=7426d05a message=loop session.id=ses_ee9d3f417ffekuEztG1Lw4SIVj step=1
+timestamp=2026-10-07T11:42:42.172Z level=INFO run=7426d05a message="exiting loop" session.id=ses_ee9d3f417ffekuEztG1Lw4SIVj
+timestamp=2026-10-07T11:42:42.220Z level=INFO run=7426d05a message="disposing instance" directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo
+real 25.70
+user 8.57
+sys 4.47

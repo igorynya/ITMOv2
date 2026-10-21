@@ -1,0 +1,13 @@
+{
+  "wall_seconds": [],
+  "median_seconds": null,
+  "units": "seconds",
+  "note": "three warm runs; separate warmup executed once per track; one retry allowed on UnknownError; up to 2 extra attempts to capture formatted answer",
+  "retries": [
+    {
+      "attempt": 1,
+      "error": "UnknownError",
+      "ref": "err_36859cfc"
+    }
+  ]
+}

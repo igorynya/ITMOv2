@@ -1,0 +1,33 @@
+timestamp=2026-10-05T18:56:37.321Z level=INFO run=9adbf128 message="creating instance" directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo
+timestamp=2026-10-05T18:56:37.323Z level=INFO run=9adbf128 message=fromDirectory directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo
+timestamp=2026-10-05T18:56:37.446Z level=INFO run=9adbf128 message=bootstrapping directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo
+timestamp=2026-10-05T18:56:37.453Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/.config/opencode/config.json
+timestamp=2026-10-05T18:56:37.453Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/.config/opencode/opencode.json
+timestamp=2026-10-05T18:56:37.453Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/.config/opencode/opencode.jsonc
+timestamp=2026-10-05T18:56:37.458Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/opencode.json
+timestamp=2026-10-05T18:56:37.459Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo/opencode.json
+timestamp=2026-10-05T18:56:37.472Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/.opencode/opencode.json
+timestamp=2026-10-05T18:56:37.472Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/.opencode/opencode.jsonc
+timestamp=2026-10-05T18:56:37.526Z level=INFO run=9adbf128 message="all LSPs are disabled"
+timestamp=2026-10-05T18:56:37.527Z level=INFO run=9adbf128 message="all formatters are disabled"
+timestamp=2026-10-05T18:56:37.527Z level=INFO run=9adbf128 message=init
+timestamp=2026-10-05T18:56:37.654Z level=INFO run=9adbf128 message="creating instance" directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2
+timestamp=2026-10-05T18:56:37.654Z level=INFO run=9adbf128 message=fromDirectory directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2
+timestamp=2026-10-05T18:56:37.734Z level=INFO run=9adbf128 message=bootstrapping directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2
+timestamp=2026-10-05T18:56:37.744Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/opencode.json
+timestamp=2026-10-05T18:56:37.748Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/.opencode/opencode.json
+timestamp=2026-10-05T18:56:37.748Z level=INFO run=9adbf128 message=loading path=/Users/igoratroskin/.opencode/opencode.jsonc
+timestamp=2026-10-05T18:56:37.753Z level=INFO run=9adbf128 message="all LSPs are disabled"
+timestamp=2026-10-05T18:56:37.753Z level=INFO run=9adbf128 message="all formatters are disabled"
+timestamp=2026-10-05T18:56:37.753Z level=INFO run=9adbf128 message=init
+timestamp=2026-10-05T18:56:37.756Z level=INFO run=9adbf128 message=created id=ses_ef2932e83ffebJzfx5wJ5RMd0E slug=clever-circuit version=1.18.34 projectID=caf0ec731057f328c719b986ce12ad0144cfc306 directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2 path="" workspaceID=undefined parentID=undefined title="New session - 2026-10-05T18:56:37.756Z" agent=undefined model=undefined metadata=undefined permission="[{\"permission\":\"question\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_enter\",\"pattern\":\"*\",\"action\":\"deny\"},{\"permission\":\"plan_exit\",\"pattern\":\"*\",\"action\":\"deny\"}]" cost=0 tokens.input=0 tokens.output=0 tokens.reasoning=0 tokens.cache.read=0 tokens.cache.write=0 time.created=1791226597756 time.updated=1791226597756
+timestamp=2026-10-05T18:56:37.780Z level=INFO run=9adbf128 message="event connected"
+timestamp=2026-10-05T18:56:37.814Z level=ERROR run=9adbf128 message=failed ref=err_f353a3f2 error="UnknownError: UnknownError" cause="UnknownError: UnknownError\n    at <anonymous> (/$bunfs/root/chunk-evdhym6h.js:1142:2068)\n    at SessionPrompt.createUserMessage (/$bunfs/root/chunk-evdhym6h.js:1142:9959)\n    at SessionPrompt.createUserMessage (definition) (/$bunfs/root/chunk-evdhym6h.js:1142:1826)\n    at SessionPrompt.prompt (/$bunfs/root/chunk-5h0b1bsy.js:4:13297)\n    at SessionPrompt.prompt (definition) (/$bunfs/root/chunk-evdhym6h.js:1142:9844)\n    at SessionHttpApi.prompt (/$bunfs/root/chunk-5h0b1bsy.js:2:84434)\n    at SessionHttpApi.prompt (definition) (/$bunfs/root/chunk-5h0b1bsy.js:4:13210)"
+[91m[1mError: [0m{
+  "name": "UnknownError",
+  "data": {
+    "message": "Unexpected server error. Check server logs for details.",
+    "ref": "err_f353a3f2"
+  }
+}
+timestamp=2026-10-05T18:56:37.816Z level=INFO run=9adbf128 message="disposing instance" directory=/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/practices/practice_03/lab/demo

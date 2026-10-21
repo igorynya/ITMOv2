@@ -146,6 +146,7 @@ venv.bak/
 .mypy_cache/
 .dmypy.json
 dmypy.json
+opencode.json
 
 # Pyre type checker
 .pyre/
@@ -173,3 +174,6 @@ student_solutions/
 !.roo/
 !.specify/
 !.vscode/
+
+/Users/igoratroskin/Documents/ITMO_SE_2_course/ITMOv2/opencode.json
+

@@ -1,0 +1,1 @@
+ANSWER: {"text": "При пустом имени: ValueError(\"empty name\")", "sources": ["practices/practice_03/lab/demo/service.py:5-6", "practices/practice_03/lab/demo/test_service.py:13-15"]}
