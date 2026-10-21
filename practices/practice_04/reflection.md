@@ -1,0 +1,19 @@
+# Рефлексия по Практике 4
+
+Контекст: Настроена среда агента (AGENTS.md), подключены skills (humanizer-zh/en/ru и todo), реализован MCP-сервер practice04.checklist для проверки артефактов практики. Evidence сохранены в папке practices/practice_04/evidence.
+
+Что мешало: Локально наблюдалась проблема с чтением Markdown-отчётов (инструмент иногда показывал только заголовок). Обход: перезапись файла и дублирование отчёта, хранение входов/выходов отдельно.
+
+Где вмешивались вручную: Контроль наполнения .md-файлов, запуск MCP через CLI/агента, корректировка собственного skill (frontmatter и маски).
+
+Как применялись инструменты: MCP-сервер запускался для проверки наличия ключевых артефактов (AGENTS.md, skills, настройки opencode.json, evidence, reflection). Skill todo собирал TODO/FIXME/NOTE и формировал отчёт.
+
+Выводы: Связка AGENTS.md + skills + MCP закрывает базовые сценарии (правки + детерминированные проверки). Skill — для лёгких задач, MCP — для стабильных проверок с ясным API. Следующий шаг — runner/hook для автоматического прогона checklist перед коммитом.
+
+Ссылки для подтверждения:
+- [checklist_run.md](./evidence/mcp/checklist_run.md) — полный отчёт по MCP: промпт, команда, успешный и ошибочный ответы.
+- [todo-report.md](./evidence/skills/todo-report.md) — отчёт по skill todo: найденные TODO и метод.
+- [README.md (MCP)](../../tools/practice-04-checklist/README.md) — документация MCP: назначение, API, установка и интеграция.
+- [AGENTS.md](../../AGENTS.md) — правила агента: политика редактирования, проверки, использование skills/MCP.
+- [reflection.md](./reflection.md) — этот файл с выводами и ссылками.
+- [hook_report.md](./evidence/checks/hook_report.md) — отчёт по hook: как он запускает strict‑checklist перед коммитом и где смотреть логи.

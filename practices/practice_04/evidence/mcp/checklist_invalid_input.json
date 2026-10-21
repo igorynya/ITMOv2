@@ -1,0 +1,7 @@
+{
+  "ok": false,
+  "error": {
+    "code": "InvalidInput",
+    "message": "'strict' must be boolean"
+  }
+}
