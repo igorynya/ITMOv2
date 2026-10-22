@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Подборки ВкусВилл</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="kicker">Учебный проект · MCP ВкусВилл</p>
+      <h1>Что приготовить сегодня?</h1>
+      <p class="lead">Готовые подборки продуктов. Соберите корзину одним нажатием — ссылка откроется на сайте ВкусВилла.</p>
+    </div>
+    <button id="refresh" class="ghost" type="button">Ещё подборки</button>
+  </header>
+
+  <main>
+    <div class="toolbar">
+      <div class="tabs" role="tablist" aria-label="Подборки">
+        <button type="button" data-mode="all" class="active" role="tab" aria-selected="true">Все</button>
+        <button type="button" data-mode="favorites" role="tab" aria-selected="false">
+          Избранное <span id="fav-count" class="count">0</span>
+        </button>
+      </div>
+      <p id="status" role="status"></p>
+    </div>
+
+    <section id="grid" class="grid" aria-live="polite"></section>
+    <p id="empty" class="empty" hidden>Пока пусто. Добавьте подборку в избранное — она останется здесь.</p>
+  </main>
+
+  <footer>
+    <p>Данные и корзина — через официальный MCP ВкусВилла. Проект не связан с ВкусВиллом.</p>
+  </footer>
+
+  <template id="card">
+    <article class="card">
+      <div class="card-top">
+        <div>
+          <h2 class="card-title"></h2>
+          <p class="card-sub"></p>
+          <div class="tags"></div>
+        </div>
+        <button class="fav" type="button" aria-pressed="false" title="В избранное">♡</button>
+      </div>
+      <ul class="items"></ul>
+      <div class="card-bottom">
+        <div>
+          <span class="total"></span>
+          <span class="budget"></span>
+        </div>
+        <button class="cart" type="button">В корзину</button>
+      </div>
+    </article>
+  </template>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
