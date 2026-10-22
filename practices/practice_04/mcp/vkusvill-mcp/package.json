@@ -1,0 +1,20 @@
+{
+  "name": "vkusvill-mcp-local",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Simplified local MCP server for VkusVill, proxying the official remote MCP",
+  "scripts": {
+    "start": "node src/server.js",
+    "demo": "node src/demo.js",
+    "test": "node src/selftest.js",
+    "check": "node --check src/server.js && node --check src/remote.js && node --check src/vv.js && node --check src/demo.js && node --check src/selftest.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.1",
+    "zod": "^3.25.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
