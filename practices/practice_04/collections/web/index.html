@@ -27,8 +27,14 @@
       <p id="status" role="status"></p>
     </div>
 
-    <section id="grid" class="grid" aria-live="polite"></section>
-    <p id="empty" class="empty" hidden>Пока пусто. Добавьте подборку в избранное — она останется здесь.</p>
+    <section id="tag-bar" class="tag-bar" role="group" aria-label="Фильтр по тегам" hidden></section>
+
+    <section id="grid" class="grid"></section>
+    <section id="feedback" class="feedback" hidden>
+      <p id="feedback-text"></p>
+      <button id="feedback-action" class="ghost" type="button" hidden></button>
+    </section>
+    <p id="notice" class="notice" role="status" hidden></p>
   </main>
 
   <footer>
