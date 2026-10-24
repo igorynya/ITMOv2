@@ -1,0 +1,111 @@
+{
+  "generated_at": "2026-10-23T23:20:14+0300",
+  "base": "127.0.0.1:18080",
+  "tags": [
+    "белок",
+    "быстро",
+    "бюджет",
+    "вегетарианское",
+    "вечер",
+    "выходные",
+    "десерт",
+    "дети",
+    "домашнее",
+    "дорога",
+    "завтрак",
+    "здоровое",
+    "компания",
+    "кофе",
+    "обед",
+    "паста",
+    "перекус",
+    "пикник",
+    "свидание",
+    "суп",
+    "ужин"
+  ],
+  "checks": [
+    {
+      "scenario": "без фильтра",
+      "request": "GET /api/collections",
+      "expected": "200, active_tag='', tags, collections<=12",
+      "actual": "status=200, active_tag='', tags=21, collections=12",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "известный тег",
+      "request": "GET /api/collections?tag=ужин",
+      "expected": "200, все collections с тегом, active_tag канонический, tags не сужен",
+      "actual": "status=200, active_tag='ужин', collections=6",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "регистр и пробелы",
+      "request": "GET ?tag=УЖИН и ?tag='  ужин  '",
+      "expected": "200, тот же active_tag, все collections с тегом",
+      "actual": "upper_status=200, spaces_status=200, upper_active='ужин', spaces_active='ужин'",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "пустой тег",
+      "request": "GET /api/collections?tag=",
+      "expected": "200, фильтр не применён, active_tag=''",
+      "actual": "status=200, active_tag='', tags=21",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "неизвестный тег",
+      "request": "GET ?tag=нет-такого",
+      "expected": "200, collections=[], tags полные, active_tag — эхо",
+      "actual": "status=200, collections=0, active_tag='нет-такого'",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "тег 65 символов",
+      "request": "GET ?tag=<65 символов>",
+      "expected": "400, error, без collections",
+      "actual": "status=400, keys=['error']",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "тег 64 символа",
+      "request": "GET ?tag=<64 символа>",
+      "expected": "200, collections=[], active_tag — эхо",
+      "actual": "status=200, collections=0, active_len=64",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "повторный параметр",
+      "request": "GET ?tag=...&tag=...",
+      "expected": "400, error",
+      "actual": "status=400, body={'error': 'tag must be specified once'}",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "битый URL и UTF-8",
+      "request": "GET ?tag=%zz и ?tag=%FF",
+      "expected": "оба 400 с error",
+      "actual": "%zz=400 {'error': 'invalid query'}, %FF=400 {'error': 'tag must be valid UTF-8'}",
+      "pass": true,
+      "note": ""
+    },
+    {
+      "scenario": "избранное не фильтруется",
+      "request": "PUT favorite; GET с tag и без",
+      "expected": "favorites одинаковый и содержит добавленную подборку",
+      "actual": "put_status=200, favorites_all=['friends-lunch-1792757602'], favorites_filtered=['friends-lunch-1792757602']",
+      "pass": true,
+      "note": ""
+    }
+  ],
+  "passed": 10,
+  "failed": 0
+}
