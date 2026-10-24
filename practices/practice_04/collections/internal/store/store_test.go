@@ -45,7 +45,7 @@ func testCollections(generation int64, count int) []domain.Collection {
 	return cols
 }
 
-func TestSampleActiveReturnsOnlyLatestGeneration(t *testing.T) {
+func TestActivePoolReturnsOnlyLatestGeneration(t *testing.T) {
 	s := newTestStore(t)
 	ctx := context.Background()
 
@@ -56,7 +56,7 @@ func TestSampleActiveReturnsOnlyLatestGeneration(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	got, err := s.SampleActive(ctx, 10)
+	got, err := s.ActivePool(ctx)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -78,6 +78,21 @@ func TestSampleActiveReturnsOnlyLatestGeneration(t *testing.T) {
 	}
 	if old.Active {
 		t.Fatal("old collection must be inactive")
+	}
+}
+
+func TestActivePoolEmptyReturnsEmptySlice(t *testing.T) {
+	s := newTestStore(t)
+
+	got, err := s.ActivePool(context.Background())
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got == nil {
+		t.Fatal("ActivePool() returned nil, want empty slice")
+	}
+	if len(got) != 0 {
+		t.Fatalf("ActivePool() = %d collections, want 0", len(got))
 	}
 }
 
