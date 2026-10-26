@@ -1,0 +1,10 @@
+{
+  "name": "06_files_idor",
+  "vuln": "V7",
+  "attack": "GET /files?user=bob (alice)",
+  "status": 200,
+  "response": {
+    "content": "TEST_ALICE receipt: chair, 5000 RUB"
+  },
+  "outcome": "BLOCK: выдан свой чек, не Боба"
+}

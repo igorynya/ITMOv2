@@ -1,0 +1,8 @@
+{
+  "name": "N3_profile",
+  "finding": "N3 валидация id",
+  "probe": "GET /profile?id=--5 (staff)",
+  "status": 400,
+  "response": {},
+  "verdict": "FIX: 400"
+}

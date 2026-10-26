@@ -1,0 +1,10 @@
+{
+  "name": "07_debug_logs_anon",
+  "vuln": "V8",
+  "attack": "GET /debug/logs без токена",
+  "status": 403,
+  "response": {
+    "error": "staff only"
+  },
+  "outcome": "BLOCK: 403"
+}

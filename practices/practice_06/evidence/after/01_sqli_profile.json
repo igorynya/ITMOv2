@@ -1,0 +1,15 @@
+{
+  "name": "01_sqli_profile",
+  "vuln": "V1",
+  "attack": "GET /profile?id=0 OR 1=1 (token alice)",
+  "status": 200,
+  "response": [
+    {
+      "id": 1,
+      "name": "TEST_ALICE",
+      "email": "alice@example.invalid",
+      "address": "TEST_ADDRESS_A"
+    }
+  ],
+  "outcome": "BLOCK: вернулся только свой профиль"
+}

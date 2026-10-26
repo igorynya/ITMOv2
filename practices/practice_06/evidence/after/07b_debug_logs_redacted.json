@@ -1,0 +1,198 @@
+{
+  "name": "07b_debug_logs_redacted",
+  "vuln": "V8",
+  "attack": "GET /debug/logs (staff) — маскирование",
+  "status": 200,
+  "response": [
+    {
+      "method": "POST",
+      "target": "/login",
+      "body": {
+        "username": "alice",
+        "password": "***"
+      },
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "48",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "POST",
+      "target": "/login",
+      "body": {
+        "username": "staff",
+        "password": "***"
+      },
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "48",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/profile",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/profile",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/search",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/profile",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/orders",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/orders",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "POST",
+      "target": "/orders",
+      "body": {
+        "product": "chair",
+        "price": -1
+      },
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "33",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/admin/export",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Role": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/files",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/files",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/debug/logs",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/debug/logs",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8078",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "***",
+        "Connection": "close"
+      }
+    }
+  ],
+  "outcome": "MASK: пароль и токен не в журнале"
+}

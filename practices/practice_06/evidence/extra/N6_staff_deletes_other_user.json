@@ -1,0 +1,18 @@
+{
+  "name": "N6_staff_deletes_other_user",
+  "finding": "staff удаляет файлы другого клиента без доп.проверок/аудита",
+  "probe": "staff execute delete_tree path='alice' -> затем alice читает свой чек",
+  "status": 200,
+  "response": {
+    "delete": {
+      "deleted": "alice"
+    },
+    "alice_reads_after": {
+      "status": 404,
+      "resp": {
+        "error": "no receipt"
+      }
+    }
+  },
+  "verdict": "ПОДТВЕРЖДЕНО: каталог alice удалён staff'ом, чек Alice больше не читается (восстанавливается рестартом)"
+}

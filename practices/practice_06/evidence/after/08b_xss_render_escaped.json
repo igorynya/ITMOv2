@@ -1,0 +1,8 @@
+{
+  "name": "08b_xss_render_escaped",
+  "vuln": "V9",
+  "attack": "GET /reviews/view после отзыва со скриптом",
+  "status": 200,
+  "response": "<html><body><p>&lt;script&gt;alert(1)&lt;/script&gt;</p></body></html>",
+  "outcome": "BLOCK: <script> экранирован"
+}

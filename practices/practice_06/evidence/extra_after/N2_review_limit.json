@@ -1,0 +1,10 @@
+{
+  "name": "N2_review_limit",
+  "finding": "N2 ограничение размера отзыва",
+  "probe": "POST /reviews text=5000 символов",
+  "status": 400,
+  "response": {
+    "error": "review too long"
+  },
+  "verdict": "FIX: 400 review too long"
+}

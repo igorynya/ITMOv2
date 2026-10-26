@@ -1,0 +1,10 @@
+{
+  "name": "08_xss_store",
+  "title": "Хранимый XSS: запись отзыва без входа",
+  "request": "POST /reviews {text:<script>...</script>} (без токена)",
+  "status": 201,
+  "response": {
+    "saved": true
+  },
+  "verdict": "Отзыв со скриптом сохранён"
+}

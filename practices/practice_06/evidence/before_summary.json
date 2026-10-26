@@ -1,0 +1,195 @@
+[
+  {
+    "name": "00_login_leaks_to_logs",
+    "title": "Логин: пароль уходит в журнал",
+    "request": "POST /login {username:alice, password:learn-alice}",
+    "status": 200,
+    "response": {
+      "token": "2eb3bbed7c6f4b2fa0b182c3a5e911a9"
+    },
+    "verdict": "token получен; см. debug_logs"
+  },
+  {
+    "name": "01_sqli_profile",
+    "title": "SQL-инъекция в GET /profile?id=",
+    "request": "GET /profile?id=0 OR 1=1  (без токена)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "см. ответ"
+  },
+  {
+    "name": "01b_sqli_profile_union",
+    "title": "SQL-инъекция UNION: чтение схемы БД",
+    "request": "GET /profile?id=-1 UNION SELECT 1,sql,3,4 FROM sqlite_master",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Через UNION читается структура БД / произвольные таблицы"
+  },
+  {
+    "name": "02_sqli_search",
+    "title": "SQL-инъекция в GET /search?q=",
+    "request": "GET /search?q=%' OR '1'='1",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Условие обойдено, выгружены все профили"
+  },
+  {
+    "name": "03_idor_profile",
+    "title": "IDOR: чужой профиль без токена",
+    "request": "GET /profile?id=2 (без X-Token) — профиль Боба",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Чужие ПДн отданы без аутентификации"
+  },
+  {
+    "name": "03b_idor_orders",
+    "title": "IDOR: все заказы без токена",
+    "request": "GET /orders (без X-Token)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Отданы заказы всех клиентов"
+  },
+  {
+    "name": "03c_enum_search",
+    "title": "Перечисление профилей без токена",
+    "request": "GET /search?q=TEST",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Поиск по чужим ПДн без аутентификации"
+  },
+  {
+    "name": "04_price_tampering",
+    "title": "Подмена цены клиентом",
+    "request": "POST /orders {product:chair, price:-1} с токеном alice",
+    "status": 201,
+    "response": {
+      "id": 3,
+      "owner": 1,
+      "product": "chair",
+      "price": 5000
+    },
+    "verdict": "Заказ создан с ценой, заданной клиентом (-1)"
+  },
+  {
+    "name": "05_role_header_escalation",
+    "title": "Эскалация: доверие заголовку X-Role",
+    "request": "GET /admin/export с заголовком X-Role: staff (без сессии сотрудника)",
+    "status": 403,
+    "response": {
+      "error": "staff only"
+    },
+    "verdict": "Экспорт всех ПДн по подделанному заголовку роли"
+  },
+  {
+    "name": "06_files_idor",
+    "title": "IDOR в /files: чужой чек",
+    "request": "GET /files?user=bob&path=receipt.txt (токен alice)",
+    "status": 200,
+    "response": {
+      "content": "TEST_ALICE receipt: chair, 5000 RUB"
+    },
+    "verdict": "Alice читает чек Боба"
+  },
+  {
+    "name": "06b_files_traversal",
+    "title": "Обход пути к служебной заметке",
+    "request": "GET /files?user=..&path=private/operator-note.txt (без токена)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Прочитан секрет оператора внутри песочницы"
+  },
+  {
+    "name": "07_debug_logs_leak",
+    "title": "Утечка паролей и токенов через /debug/logs",
+    "request": "GET /debug/logs (без токена)",
+    "status": 403,
+    "response": {
+      "error": "staff only"
+    },
+    "verdict": "см. ответ"
+  },
+  {
+    "name": "08_xss_store",
+    "title": "Хранимый XSS: запись отзыва без входа",
+    "request": "POST /reviews {text:<script>...</script>} (без токена)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Отзыв со скриптом сохранён"
+  },
+  {
+    "name": "08b_xss_render",
+    "title": "Хранимый XSS: отдача без экранирования",
+    "request": "GET /reviews/view",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "см. ответ"
+  },
+  {
+    "name": "09_assistant_context_open",
+    "title": "Контекст помощника без авторизации",
+    "request": "GET /assistant/context?order_id=1 (без токена)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Контекст с данными заказа и инструментами export/delete выдан без входа"
+  },
+  {
+    "name": "09b_assistant_read_secret",
+    "title": "Исполнитель читает секрет без токена",
+    "request": "POST /assistant/execute read_file private/operator-note.txt (без токена)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Секрет оператора прочитан через инструмент помощника"
+  },
+  {
+    "name": "09c_assistant_export",
+    "title": "Исполнитель выгружает все ПДн без токена",
+    "request": "POST /assistant/execute export_profiles (без токена)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Все профили выгружены через помощника"
+  },
+  {
+    "name": "09d_prompt_injection_payload",
+    "title": "Prompt injection через отзыв в контексте",
+    "request": "POST /reviews с вредоносной инструкцией -> GET /assistant/context",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Вредоносная инструкция попала в prompt помощника из непроверенных отзывов"
+  },
+  {
+    "name": "10_assistant_delete_all",
+    "title": "Разрушение всех файлов стенда без токена",
+    "request": "POST /assistant/execute delete_tree path='.' (без токена)",
+    "status": 401,
+    "response": {
+      "error": "login required"
+    },
+    "verdict": "Удалено всё дерево файлов стенда (восстанавливается рестартом)"
+  }
+]

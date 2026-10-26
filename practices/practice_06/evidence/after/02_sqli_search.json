@@ -1,0 +1,8 @@
+{
+  "name": "02_sqli_search",
+  "vuln": "V2",
+  "attack": "GET /search?q=%' OR '1'='1 (staff)",
+  "status": 200,
+  "response": [],
+  "outcome": "BLOCK: инъекция нейтрализована, 0 строк"
+}

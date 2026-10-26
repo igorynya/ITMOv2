@@ -1,0 +1,21 @@
+{
+  "name": "09c_assistant_export",
+  "title": "Исполнитель выгружает все ПДн без токена",
+  "request": "POST /assistant/execute export_profiles (без токена)",
+  "status": 200,
+  "response": [
+    {
+      "id": 1,
+      "name": "TEST_ALICE",
+      "email": "alice@example.invalid",
+      "address": "TEST_ADDRESS_A"
+    },
+    {
+      "id": 2,
+      "name": "TEST_BOB",
+      "email": "bob@example.invalid",
+      "address": "TEST_ADDRESS_B"
+    }
+  ],
+  "verdict": "Все профили выгружены через помощника"
+}
