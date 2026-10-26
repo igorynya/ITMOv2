@@ -1,0 +1,10 @@
+{
+  "name": "10d_execute_export",
+  "vuln": "V11",
+  "attack": "alice execute export_profiles",
+  "status": 403,
+  "response": {
+    "error": "staff only"
+  },
+  "outcome": "BLOCK: 403 staff only"
+}

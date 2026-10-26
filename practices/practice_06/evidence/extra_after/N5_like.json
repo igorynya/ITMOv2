@@ -1,0 +1,8 @@
+{
+  "name": "N5_like",
+  "finding": "N5 экранирование LIKE",
+  "probe": "GET /search?q=% (staff)",
+  "status": 200,
+  "response": [],
+  "verdict": "FIX: '%' трактуется как литерал (0 строк)"
+}

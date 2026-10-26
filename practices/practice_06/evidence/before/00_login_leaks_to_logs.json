@@ -1,0 +1,10 @@
+{
+  "name": "00_login_leaks_to_logs",
+  "title": "Логин: пароль уходит в журнал",
+  "request": "POST /login {username:alice, password:learn-alice}",
+  "status": 200,
+  "response": {
+    "token": "88ac8dfab4b94a28bebf2b34eb5d332f"
+  },
+  "verdict": "token получен; см. debug_logs"
+}

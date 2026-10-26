@@ -1,0 +1,10 @@
+{
+  "name": "08_xss_store_anon",
+  "vuln": "V9",
+  "attack": "POST /reviews без токена",
+  "status": 401,
+  "response": {
+    "error": "login required"
+  },
+  "outcome": "BLOCK: 401"
+}

@@ -1,0 +1,10 @@
+{
+  "name": "N3a2_context_orderid_500",
+  "finding": "То же для order_id в /assistant/context",
+  "probe": "GET /assistant/context?order_id=--1 (staff)",
+  "status": 500,
+  "response": {
+    "error": "internal error"
+  },
+  "verdict": "ПОДТВЕРЖДЕНО: 500"
+}

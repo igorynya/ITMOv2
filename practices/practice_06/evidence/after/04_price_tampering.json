@@ -1,0 +1,13 @@
+{
+  "name": "04_price_tampering",
+  "vuln": "V5",
+  "attack": "POST /orders price=-1 (alice)",
+  "status": 201,
+  "response": {
+    "id": 3,
+    "owner": 1,
+    "product": "chair",
+    "price": 5000
+  },
+  "outcome": "BLOCK: цена из каталога 5000"
+}

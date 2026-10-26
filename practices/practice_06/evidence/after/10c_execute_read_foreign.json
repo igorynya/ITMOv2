@@ -1,0 +1,10 @@
+{
+  "name": "10c_execute_read_foreign",
+  "vuln": "V11",
+  "attack": "alice execute read_file чужой чек",
+  "status": 403,
+  "response": {
+    "error": "access denied"
+  },
+  "outcome": "BLOCK: 403"
+}
