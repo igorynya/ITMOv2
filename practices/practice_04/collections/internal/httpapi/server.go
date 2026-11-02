@@ -2,15 +2,18 @@ package httpapi
 
 import (
 	"context"
-	"crypto/rand"
+	cryptorand "crypto/rand"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"io/fs"
 	"log/slog"
+	mathrand "math/rand"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
+	"unicode/utf8"
 
 	"vkusvill-collections/internal/domain"
 	"vkusvill-collections/internal/store"
@@ -22,7 +25,7 @@ const (
 )
 
 type Store interface {
-	SampleActive(ctx context.Context, limit int) ([]domain.Collection, error)
+	ActivePool(ctx context.Context) ([]domain.Collection, error)
 	Get(ctx context.Context, id string) (domain.Collection, error)
 	ListFavorites(ctx context.Context, visitorID string) ([]domain.Collection, error)
 	AddFavorite(ctx context.Context, visitorID, collectionID string) error
@@ -89,13 +92,67 @@ func New(st Store, cart CartClient, static fs.FS, cfg Config, logger *slog.Logge
 }
 
 func (s *server) collections(w http.ResponseWriter, r *http.Request) {
+	query, err := url.ParseQuery(r.URL.RawQuery)
+	if err != nil {
+		writeError(w, http.StatusBadRequest, "invalid query")
+		return
+	}
+	values := query["tag"]
+	if len(values) > 1 {
+		writeError(w, http.StatusBadRequest, "tag must be specified once")
+		return
+	}
+	raw := ""
+	if len(values) == 1 {
+		raw = values[0]
+	}
+	if !utf8.ValidString(raw) {
+		writeError(w, http.StatusBadRequest, "tag must be valid UTF-8")
+		return
+	}
+	requested := domain.TrimTag(raw)
+	if requested != "" && utf8.RuneCountInString(requested) > domain.MaxTagLength {
+		writeError(w, http.StatusBadRequest, "tag is too long")
+		return
+	}
+
 	visitor := visitorFrom(r.Context())
 
-	collections, err := s.store.SampleActive(r.Context(), s.cfg.PerPage)
+	pool, err := s.store.ActivePool(r.Context())
 	if err != nil {
 		s.fail(w, http.StatusInternalServerError, "cannot load collections", err)
 		return
 	}
+	tags := domain.AvailableTags(pool)
+
+	activeTag := ""
+	selectedTag := ""
+	unknown := false
+	if requested != "" {
+		canonical, ok := domain.ResolveTag(tags, requested)
+		if ok {
+			activeTag = canonical
+			selectedTag = canonical
+		} else {
+			activeTag = requested
+			unknown = true
+		}
+	}
+
+	filtered := pool
+	if selectedTag != "" {
+		filtered = make([]domain.Collection, 0, len(pool))
+		for _, col := range pool {
+			if domain.HasTag(col, selectedTag) {
+				filtered = append(filtered, col)
+			}
+		}
+	}
+	if unknown {
+		filtered = []domain.Collection{}
+	}
+	collections := sampleCollections(filtered, s.cfg.PerPage)
+
 	favorites, err := s.store.ListFavorites(r.Context(), visitor)
 	if err != nil {
 		s.fail(w, http.StatusInternalServerError, "cannot load favorites", err)
@@ -110,6 +167,8 @@ func (s *server) collections(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]any{
 		"collections": collections,
 		"favorites":   ids,
+		"tags":        tags,
+		"active_tag":  activeTag,
 	})
 }
 
@@ -217,6 +276,20 @@ func writeJSON(w http.ResponseWriter, status int, value any) {
 	_ = json.NewEncoder(w).Encode(value)
 }
 
+func sampleCollections(cols []domain.Collection, limit int) []domain.Collection {
+	if limit <= 0 || len(cols) == 0 {
+		return []domain.Collection{}
+	}
+	sampled := append([]domain.Collection(nil), cols...)
+	mathrand.Shuffle(len(sampled), func(i, j int) {
+		sampled[i], sampled[j] = sampled[j], sampled[i]
+	})
+	if len(sampled) > limit {
+		sampled = sampled[:limit]
+	}
+	return sampled
+}
+
 func writeError(w http.ResponseWriter, status int, message string) {
 	writeJSON(w, status, map[string]string{"error": message})
 }
@@ -290,7 +363,7 @@ func visitorFrom(ctx context.Context) string {
 
 func newToken() (string, error) {
 	raw := make([]byte, 16)
-	if _, err := rand.Read(raw); err != nil {
+	if _, err := cryptorand.Read(raw); err != nil {
 		return "", err
 	}
 	return hex.EncodeToString(raw), nil
