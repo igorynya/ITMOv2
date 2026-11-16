@@ -1,0 +1,645 @@
+{
+  "name": "labwork_7.2_part2",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 9 * * MON"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        224,
+        0
+      ],
+      "id": "9e40f3e9-07aa-4aff-b8d0-08ee9497162e",
+      "name": "Schedule Trigger1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/igorynya/n8n-review-test/issues",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "state",
+              "value": "all"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            },
+            {
+              "name": "since",
+              "value": "={{ $now.minus({ days: 7 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        480,
+        -176
+      ],
+      "id": "354b1168-d567-4f6b-94d0-c01bb1aee67d",
+      "name": "New issues",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/igorynya/n8n-review-test/issues",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "state",
+              "value": "closed"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            },
+            {
+              "name": "since",
+              "value": "={{ $now.minus({ days: 7 }).toISO() }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        496,
+        16
+      ],
+      "id": "7753f365-0fa4-4d95-9a16-91ff8183b4a2",
+      "name": "Closed issues",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/igorynya/n8n-review-test/pulls",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "=repo:igorynya/n8n-review-test is:pr created:>={{ $now.minus({ days: 7 }).toFormat('yyyy-MM-dd') }}"
+            },
+            {
+              "name": "state",
+              "value": "all"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        496,
+        208
+      ],
+      "id": "02c08990-ae97-4f1e-8cbd-85f4904fba44",
+      "name": "pull requests",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "numberInputs": 4
+      },
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        944,
+        96
+      ],
+      "id": "77aa83f0-1d3e-4977-9072-ce7056eda0e7",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "jsCode": "const since = new Date(Date.now() - 7 * 24 * 3600 * 1000);\nconst notPr = i => i.number && !i.pull_request;\n\n// Данные из четырёх запросов\nconst created = $('New issues').all().map(i => i.json)\n  .filter(i => notPr(i) && new Date(i.created_at) >= since);\nconst closed = $('Closed issues').all().map(i => i.json)\n  .filter(i => notPr(i) && i.closed_at && new Date(i.closed_at) >= since);\nconst prCount = $('pull requests').all().map(i => i.json)\n  .filter(p => p.number && new Date(p.created_at) >= since).length;\nconst backlog = $('Open issues').all().map(i => i.json).filter(notPr).length;\n\n// Группировка новых Issues по типу (по лейблу) и по автору\nconst types = ['bug', 'task', 'future', 'needs-triage'];\nconst byType = Object.fromEntries([...types, 'other'].map(t => [t, 0]));\nconst byAuthor = {};\nfor (const i of created) {\n  const names = i.labels.map(l => l.name);\n  const t = types.find(t => names.includes(t)) ?? 'other';\n  byType[t]++;\n  byAuthor[i.user.login] = (byAuthor[i.user.login] ?? 0) + 1;\n}\n\n// HTML-письмо\nconst rows = obj => Object.entries(obj)\n  .map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');\n\nconst html = `<h2>Статистика Issues за неделю</h2>\n<p>Новых: ${created.length}, закрыто: ${closed.length}, PR: ${prCount}, открытых сейчас: ${backlog}</p>\n<h3>По типам</h3>\n<table border=\"1\" cellpadding=\"6\">${rows(byType)}</table>\n<h3>По авторам</h3>\n<table border=\"1\" cellpadding=\"6\">${rows(byAuthor)}</table>`;\n\nreturn [{\n  json: {\n    created: created.length,\n    closed: closed.length,\n    prs: prCount,\n    backlog,\n    byType,\n    byAuthor,\n    html,\n  },\n}];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1248,
+        128
+      ],
+      "id": "2b7a4337-e702-4ca0-9d1c-d6ae6bc11e53",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "url": "https://api.github.com/repos/igorynya/n8n-review-test/issues",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "githubApi",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "state",
+              "value": "open"
+            },
+            {
+              "name": "per_page",
+              "value": "100"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        496,
+        416
+      ],
+      "id": "45b3c091-0692-49f0-b4f4-52f5c6edb942",
+      "name": "Open issues",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "i27022007@gmail.com",
+        "toEmail": "i27022007@gmail.com",
+        "html": "={{ $json.html }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        1680,
+        80
+      ],
+      "id": "5bfc5207-53b4-456b-9b19-615d7fd764af",
+      "name": "Send an Email",
+      "webhookId": "bf17b37d-86f6-428b-b93a-e9f0651ea0f9",
+      "credentials": {
+        "smtp": {
+          "id": "Dgs8WPB7QHi27myD",
+          "name": "SMTP account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "dataTableId": {
+          "__rl": true,
+          "value": "2cqArlw655lGSf0l",
+          "mode": "list",
+          "cachedResultName": "weekly_stats",
+          "cachedResultUrl": "/projects/PBaY1LVrwPHx7OhB/datatables/2cqArlw655lGSf0l"
+        },
+        "returnAll": true
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1504,
+        320
+      ],
+      "id": "63d17833-a8ef-46b8-aef0-6a841dc71ed5",
+      "name": "Get row(s)"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Текущая неделя из первого Code node\nconst cur = $('Code in JavaScript').first().json;\nconst week = $now.toFormat(\"kkkk-'W'WW\");   // например 2026-W47\n\nconst current = {\n  week,\n  created: cur.created,\n  closed: cur.closed,\n  prs: cur.prs,\n  backlog: cur.backlog,\n  bug: cur.byType['bug'] ?? 0,\n  task: cur.byType['task'] ?? 0,\n  future: cur.byType['future'] ?? 0,\n  needs_triage: cur.byType['needs-triage'] ?? 0,\n  other: cur.byType['other'] ?? 0,\n};\n\n// Прошлая неделя: последняя запись в таблице, где week не равна текущей\nconst rows = $input.all().map(i => i.json).filter(r => r.week && r.week !== week);\nrows.sort((a, b) => String(a.week).localeCompare(String(b.week)));\nconst prev = rows.length ? rows[rows.length - 1] : null;\n\nconst labels = {\n  created: 'Новых Issues',\n  closed: 'Закрыто Issues',\n  prs: 'Pull requests',\n  backlog: 'Открытых сейчас',\n  bug: 'bug',\n  task: 'task',\n  future: 'future',\n  needs_triage: 'needs-triage',\n  other: 'other',\n};\n\nconst deltas = {};\nfor (const k of Object.keys(labels)) {\n  deltas[k] = prev ? Number(current[k]) - Number(prev[k] ?? 0) : null;\n}\nconst fmt = d => d === null ? '—' : d > 0 ? `+${d}` : `${d}`;\n\nconst row = k => `<tr>\n  <td>${labels[k]}</td>\n  <td>${current[k]}</td>\n  <td>${prev ? (prev[k] ?? 0) : '—'}</td>\n  <td>${fmt(deltas[k])}</td>\n</tr>`;\n\nconst table = keys => `<table border=\"1\" cellpadding=\"6\">\n  <tr><th>Показатель</th><th>Эта неделя</th><th>Прошлая</th><th>Δ</th></tr>\n  ${keys.map(row).join('')}\n</table>`;\n\nconst authors = Object.entries(cur.byAuthor)\n  .map(([k, v]) => `<tr><td>${k}</td><td>${v}</td></tr>`).join('');\n\nconst html = `<h2>Статистика Issues за неделю ${week}</h2>\n<p>Сравнение с ${prev ? prev.week : 'прошлой неделей (данных нет)'}</p>\n<h3>Общие показатели</h3>${table(['created', 'closed', 'prs', 'backlog'])}\n<h3>По типам</h3>${table(['bug', 'task', 'future', 'needs_triage', 'other'])}\n<h3>По авторам</h3><table border=\"1\" cellpadding=\"6\">${authors}</table>`;\n\n// Текст для AI-комментария\nconst summary = Object.keys(labels)\n  .map(k => `${labels[k]}: ${current[k]} (было ${prev ? (prev[k] ?? 0) : 'нет данных'}, Δ ${fmt(deltas[k])})`)\n  .join('\\n');\n\nreturn [{ json: { ...current, prevWeek: prev ? prev.week : null, deltas, summary, html } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1744,
+        224
+      ],
+      "id": "f7bb37cf-c883-4dfd-832a-cfaa99e5b783",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты аналитик поддержки проекта. Ниже статистика GitHub Issues за неделю и изменения по сравнению с прошлой неделей (Δ).\n\nНапиши 2–3 предложения по-русски: что изменилось и на что стоит обратить внимание. Используй только данные из статистики, не выдумывай причин и цифр. Если данных о прошлой неделе нет, так и скажи.\n\n{{ $('Code in JavaScript1').first().json.summary }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2160,
+        176
+      ],
+      "id": "904ebc22-d9c8-460c-aa9c-54e87eaf9c66",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        2144,
+        384
+      ],
+      "id": "f8e3a9f4-52b8-4363-9234-799789954cb7",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JvVWoVvadg9Gxz9T",
+          "name": "OpenAI account 22"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "i27022007@gmail.com",
+        "toEmail": "i27022007@gmail.com",
+        "html": "={{ $('Code in JavaScript1').first().json.html }}\n<h3>AI-комментарий недели</h3>\n<p>{{$json.output }}</p>",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        2480,
+        176
+      ],
+      "id": "64c36332-3afd-4b9e-a071-f8b3a9a1683b",
+      "name": "Send an Email1",
+      "webhookId": "bf17b37d-86f6-428b-b93a-e9f0651ea0f9",
+      "credentials": {
+        "smtp": {
+          "id": "Dgs8WPB7QHi27myD",
+          "name": "SMTP account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "upsert",
+        "dataTableId": {
+          "__rl": true,
+          "value": "2cqArlw655lGSf0l",
+          "mode": "list",
+          "cachedResultName": "weekly_stats",
+          "cachedResultUrl": "/projects/PBaY1LVrwPHx7OhB/datatables/2cqArlw655lGSf0l"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "week",
+              "keyValue": "={{ $json.week }}"
+            }
+          ]
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "created": "={{ $json.created }}",
+            "closed": "={{ $json.closed }}",
+            "prs": "={{ $json.prs }}",
+            "backlog": "={{ $json.backlog }}",
+            "bug": "={{ $json.bug }}",
+            "task": "={{ $json.task }}",
+            "future": "={{ $json.future }}",
+            "other": "={{ $json.other }}",
+            "week": "={{ $json.week }}",
+            "needs_triage": "={{ $json.needs_triage }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "week",
+              "displayName": "week",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "created",
+              "displayName": "created",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "closed",
+              "displayName": "closed",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "prs",
+              "displayName": "prs",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "backlog",
+              "displayName": "backlog",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "bug",
+              "displayName": "bug",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "task",
+              "displayName": "task",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "future",
+              "displayName": "future",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "needs_triage",
+              "displayName": "needs_triage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            },
+            {
+              "id": "other",
+              "displayName": "other",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        1952,
+        224
+      ],
+      "id": "1f178bb9-0343-43f9-a4ea-dc88a0e4616d",
+      "name": "Upsert row(s)"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger1": {
+      "main": [
+        [
+          {
+            "node": "New issues",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Closed issues",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "pull requests",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Open issues",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "New issues": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Closed issues": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "pull requests": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 2
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Open issues": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 3
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Send an Email",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Get row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send an Email": {
+      "main": [
+        []
+      ]
+    },
+    "Get row(s)": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Upsert row(s)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send an Email1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert row(s)": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "cd373247-3dd7-4433-aaf5-f77b67d31d58",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68dbbb4e8fa686c3fd4e9982ade6836edb66976f207553e7ac22df961581c78c"
+  },
+  "nodeGroups": [],
+  "id": "7V39tu3s7LML38Q1",
+  "tags": []
+}

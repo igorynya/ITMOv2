@@ -1,0 +1,718 @@
+{
+  "name": "labwork-7.2",
+  "nodes": [
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "events": [
+          "issues"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [
+        -480,
+        -176
+      ],
+      "id": "adea1ae0-eae8-4178-8976-f768259cae8a",
+      "name": "Github Trigger",
+      "webhookId": "1d755ca3-6c03-436c-9ee6-16f9060113d6",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "ad80196c-abe3-4be2-bfbe-d995388ad57f",
+              "leftValue": "={{ $json.body.action }}",
+              "rightValue": "opened",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        -336,
+        -176
+      ],
+      "id": "138365ee-4a96-4159-bae2-e8d6ee36067d",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "42d46a3b-f3ca-4c64-944b-d8b903c25292",
+              "name": "title",
+              "value": "={{ $json.body.issue.title }}",
+              "type": "string"
+            },
+            {
+              "id": "81eca0d0-97fc-42e6-9db1-a5ffd16d22c7",
+              "name": "body",
+              "value": "={{ $json.body.issue.body }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -112,
+        -240
+      ],
+      "id": "c409e852-0722-4b9a-aac0-681bfeea7f7b",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "workflowId": {
+          "__rl": true,
+          "value": "DVmi6wLVlODYDlsb",
+          "mode": "list",
+          "cachedResultUrl": "/workflow/DVmi6wLVlODYDlsb",
+          "cachedResultName": "classifier_subworkflow"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "title": "={{ $json.title }}",
+            "body": "={{ $json.body }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            },
+            {
+              "id": "body",
+              "displayName": "body",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "canBeUsedToMatch": true,
+              "type": "string",
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": true
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.executeWorkflow",
+      "typeVersion": 1.4,
+      "position": [
+        48,
+        -240
+      ],
+      "id": "ec28609b-b710-4789-b0f5-1ceef2ad75c5",
+      "name": "Call 'classifier_subworkflow'"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Call \\'classifier_subworkflow\\'').item.json.type }}",
+                    "rightValue": "bug",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "d447f3eb-6d3f-43d5-940f-e0d6dcd5b475"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "64666209-e46b-404c-b0ec-8e6b6c14e7b8",
+                    "leftValue": "={{ $('Call \\'classifier_subworkflow\\'').item.json.type }}",
+                    "rightValue": "task",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "d79cd7d7-b7d8-45ce-8288-c3deb59ca91f",
+                    "leftValue": "={{ $('Call \\'classifier_subworkflow\\'').item.json.type }}",
+                    "rightValue": "feature",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "60601153-824a-4374-b649-e89ea69fd1c7",
+                    "leftValue": "={{ $('Call \\'classifier_subworkflow\\'').item.json.type }}",
+                    "rightValue": "unknown",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        464,
+        -352
+      ],
+      "id": "e3935d75-7c2c-48d9-8e41-d59d7f1e7f76",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "editFields": {
+          "labels": [
+            {
+              "label": "bug"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        672,
+        -768
+      ],
+      "id": "1b82d3f8-bb5e-41e6-8c20-a03c12b85acf",
+      "name": "label-bug",
+      "webhookId": "e0a0b77d-797e-4b43-ac7b-ce24aa90a605",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "editFields": {
+          "labels": [
+            {
+              "label": "future"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        -320
+      ],
+      "id": "b6978653-768f-4cf4-8221-002f126932c7",
+      "name": "label-future",
+      "webhookId": "e0a0b77d-797e-4b43-ac7b-ce24aa90a605",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "editFields": {
+          "labels": [
+            {
+              "label": "needs-triage"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        -144
+      ],
+      "id": "36b4af0c-3673-49b0-b0a3-c4ed2f4fae60",
+      "name": "label-needs-triage",
+      "webhookId": "e0a0b77d-797e-4b43-ac7b-ce24aa90a605",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "createComment",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "body": "=Привет, @{{ $('Github Trigger').item.json.body.issue.user.login}}! Спасибо за сообщение. Мы классифицировали его как баг. Команда посмотрит и при необходимости уточнит детали воспроизведения."
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        912,
+        -768
+      ],
+      "id": "edf11a9c-fdd5-43b2-afa2-41df534ff5a5",
+      "name": "Create a bag's comment on an issue",
+      "webhookId": "57bd3e46-61dc-42df-9150-0f5ef10d15ba",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "createComment",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "body": "=Привет, @{{ $('Github Trigger').item.json.body.issue.user.login}}! Спасибо за идею. Мы классифицировали её как запрос новой возможности и добавили в обсуждение."
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        912,
+        -320
+      ],
+      "id": "c03a58d6-4300-4c5d-a7bc-61ea6cbf306d",
+      "name": "Create a feature's comment1",
+      "webhookId": "57bd3e46-61dc-42df-9150-0f5ef10d15ba",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 4
+          },
+          "conditions": [
+            {
+              "id": "cfbafb9a-ff80-414c-8f82-f9616385b0c3",
+              "leftValue": "={{ $json.confidence }}",
+              "rightValue": 0.8,
+              "operator": {
+                "type": "number",
+                "operation": "gte"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.4,
+      "position": [
+        208,
+        -240
+      ],
+      "id": "e10fc5e3-f768-4e52-ae37-054cf91e8740",
+      "name": "If confidence >= 0.8"
+    },
+    {
+      "parameters": {
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "editFields": {
+          "labels": [
+            {
+              "label": "task"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        -512
+      ],
+      "id": "b4d77cd9-292d-4df2-ba30-cfa61ec80435",
+      "name": "label-task",
+      "webhookId": "e0a0b77d-797e-4b43-ac7b-ce24aa90a605",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "createComment",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "issueNumber": "={{ $('Github Trigger').item.json.body.issue.number }}",
+        "body": "=Привет, @{{ $('Github Trigger').item.json.body.issue.user.login}}! Спасибо за сообщение. Мы классифицировали его как задачу. Команда посмотрит и при необходимости уточнит детали воспроизведения."
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        912,
+        -512
+      ],
+      "id": "29e3c66a-2d18-4bcc-968f-0a6ea054afa0",
+      "name": "Create a task's comment",
+      "webhookId": "57bd3e46-61dc-42df-9150-0f5ef10d15ba",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Github Trigger": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Call 'classifier_subworkflow'",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call 'classifier_subworkflow'": {
+      "main": [
+        [
+          {
+            "node": "If confidence >= 0.8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "label-bug",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "label-task",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "label-future",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "label-needs-triage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "label-bug": {
+      "main": [
+        [
+          {
+            "node": "Create a bag's comment on an issue",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "label-future": {
+      "main": [
+        [
+          {
+            "node": "Create a feature's comment1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "label-needs-triage": {
+      "main": [
+        []
+      ]
+    },
+    "If confidence >= 0.8": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "label-needs-triage",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "label-task": {
+      "main": [
+        [
+          {
+            "node": "Create a task's comment",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "faecd5a4-29fe-4d66-880f-e5938dd4eac5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68dbbb4e8fa686c3fd4e9982ade6836edb66976f207553e7ac22df961581c78c"
+  },
+  "nodeGroups": [],
+  "id": "tusdH2UlJ5GsMYeC",
+  "tags": []
+}

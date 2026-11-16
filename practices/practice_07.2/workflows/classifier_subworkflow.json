@@ -1,0 +1,170 @@
+{
+  "name": "classifier_subworkflow",
+  "nodes": [
+    {
+      "parameters": {
+        "workflowInputs": {
+          "values": [
+            {
+              "name": "title"
+            },
+            {
+              "name": "body"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "77132d26-9679-4cc2-a425-de5318da546e",
+      "name": "When Executed by Another Workflow"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты классифицируешь GitHub Issue. Определи тип обращения.\n\nТипы:\n- bug: что-то работает не так, есть ошибка, сбой, неожиданное поведение.\n- task: вопрос о существующей функциональности или рабочая задача.\n- feature: просьба о новой возможности.\n- unknown: если данных недостаточно, обращение расплывчатое или содержит признаки нескольких типов.\n\nПравила:\n- Не придумывай то, чего нет в тексте.\n- Если описание слишком короткое или нечёткое, верни unknown и confidence ниже 0.5.\n- confidence — число от 0 до 1: насколько ты уверен в типе.\n\nФормат ответа:\nВерни ТОЛЬКО валидный JSON без пояснений, без markdown и без обрамляющих кавычек, строго с двумя полями:\n{\"type\": \"bug\", \"confidence\": 0.91}\n- type — одна из строк: bug, task, feature, unknown.\n- confidence — число от 0 до 1.\n\nПримеры:\n«Приложение падает при открытии файла > 10 МБ. Шаги: 1. открыть файл 2. нажать Ctrl+F» → {\"type\": \"bug\", \"confidence\": 0.95}\n«Как настроить цвета темы? Не нашёл в документации» → {\"type\": \"task\", \"confidence\": 0.9}\n«Добавьте экспорт в CSV, это ускорит работу с отчётами» → {\"type\": \"feature\", \"confidence\": 0.92}\n«Иногда не работает» → {\"type\": \"unknown\", \"confidence\": 0.2}\n\nЗаголовок: {{ $json.title}}\nОписание: {{ $json.body }}",
+        "hasOutputParser": true,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        208,
+        0
+      ],
+      "id": "2eaca0b5-43f2-4111-8848-6f2a68addfc2",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "jsonSchemaExample": "{\n\t\"type\": \"bug\",\n\t\"confidence\": 0.239\n}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        416,
+        256
+      ],
+      "id": "5c7ff6bf-c332-4eae-95d3-beed5c152391",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "anthropic/claude-sonnet-5",
+          "mode": "list",
+          "cachedResultName": "anthropic/claude-sonnet-5"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        128,
+        256
+      ],
+      "id": "1264711a-a220-4f26-8fbd-3c1718e4a590",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JvVWoVvadg9Gxz9T",
+          "name": "OpenAI account 22"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ec8e207e-b170-4017-a4ae-e4cc43bb0f14",
+              "name": "type",
+              "value": "={{ $json.output.type }}",
+              "type": "string"
+            },
+            {
+              "id": "43eed1da-8994-4302-afbd-aab7c8556402",
+              "name": "confidence",
+              "value": "={{ $json.output.confidence }}",
+              "type": "number"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        592,
+        0
+      ],
+      "id": "f53cf048-8f91-4188-af02-31dafed562e1",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Executed by Another Workflow": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "228014ec-98dd-4257-a434-074af53e81d1",
+  "meta": {
+    "instanceId": "68dbbb4e8fa686c3fd4e9982ade6836edb66976f207553e7ac22df961581c78c"
+  },
+  "nodeGroups": [],
+  "id": "DVmi6wLVlODYDlsb",
+  "tags": []
+}
