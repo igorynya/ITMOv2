@@ -1,0 +1,885 @@
+{
+  "name": "labwork_7.1",
+  "nodes": [
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Github Trigger').first().json.body.action }}",
+                    "rightValue": "opened",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "04c3a7c4-6f2c-4da0-a389-07f082084745"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "81435e71-0b05-4eca-832c-b393a6b1bc73",
+                    "leftValue": "={{ $('Github Trigger').first().json.body.action }}",
+                    "rightValue": "created",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        192,
+        -64
+      ],
+      "id": "12fa0a9e-865a-498e-ae48-625a89fd6c1a",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты опытный ревьюер кода. Тебе дают diff pull request. Твоя задача — найти реальные проблемы и дать полезные замечания, а не пересказывать изменения.\n\nЧто проверять, по убыванию важности:\n1. Ошибки и баги: неверная логика, пропущенные граничные случаи, исключения, деление на ноль, пустые списки, неверные индексы.\n2. Безопасность: секреты в коде, инъекции, небезопасная работа с данными.\n3. Поведение и совместимость: изменился ли контракт функции (тип результата, выбрасываемые исключения) и не сломает ли это вызывающий код.\n4. Читаемость и поддерживаемость: имена, дублирование, лишняя сложность.\n5. Тесты: что осталось без проверки.\n\nПравила:\n- Комментируй только то, что видно в diff. Не выдумывай код, которого нет.\n- Каждое замечание должно содержать: где (файл и функция или строка), в чём проблема, чем это грозит и как исправить (коротко, с примером кода, если нужно).\n- Не пиши очевидное и не хвали ради вежливости. Если проблем нет, так и скажи.\n- Если не уверен, помечай замечание как «возможная проблема».\n- Отвечай на русском языке, кратко и по делу.\n\nФормат ответа (Markdown):\n\n## Ревью PR\n**Общий вывод:** 1–2 предложения: можно ли мёрджить.\n\n### Критичные\n- `файл`, `функция/строка`: проблема → предложение.\n\n### Важные\n- ...\n\n### Мелкие замечания\n- ...\n\nПустые разделы не выводи.\n\nвот сам diff: {{ $json.diff }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        864,
+        -128
+      ],
+      "id": "1451cee2-1e98-4892-8c57-0d2152b8ce50",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "id"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        912,
+        112
+      ],
+      "id": "747886ad-9415-44c0-9c0b-ede96fec9b1c",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "JvVWoVvadg9Gxz9T",
+          "name": "OpenAI account 22"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pullRequest",
+        "operation": "createComment",
+        "pullRequestNumber": "={{ $('Insert row').item.json.PR_number }}",
+        "body": "={{ $json.output }}",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1184,
+        -112
+      ],
+      "id": "3b6b3af5-77cd-4075-ad92-97a6b955c78c",
+      "name": "Create a comment on a pull request",
+      "webhookId": "b3a7c6f7-22e4-4eb4-b034-ebb461ce67b9",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        },
+        "events": [
+          "pull_request",
+          "issue_comment"
+        ],
+        "options": {}
+      },
+      "type": "n8n-nodes-base.githubTrigger",
+      "typeVersion": 1,
+      "position": [
+        -48,
+        -64
+      ],
+      "id": "2e6e063c-07a0-454f-b29f-6822983695f8",
+      "name": "Github Trigger",
+      "webhookId": "6eb67c4c-afcc-4b23-a0c5-01d53474319b",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pullRequest",
+        "operation": "getDiff",
+        "pullRequestNumber": "={{ $json.PR_number }}",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        688,
+        96
+      ],
+      "id": "1e6cbd23-3b65-443b-8a40-c60db0a91378",
+      "name": "Get a pull request diff",
+      "webhookId": "6ca0ab5d-5a72-4d8f-bdc7-687bcc9369ec",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "2L9rkI1RHIywiQY9",
+          "mode": "list",
+          "cachedResultName": "PR_numbers",
+          "cachedResultUrl": "/projects/PBaY1LVrwPHx7OhB/datatables/2L9rkI1RHIywiQY9"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "PR_number": "={{ $json.body.number }}"
+          },
+          "matchingColumns": [
+            "PR_number"
+          ],
+          "schema": [
+            {
+              "id": "PR_number",
+              "displayName": "PR_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        -80
+      ],
+      "id": "6c082700-5892-4f41-97e5-dc84b46865c6",
+      "name": "Insert row"
+    },
+    {
+      "parameters": {
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "2L9rkI1RHIywiQY9",
+          "mode": "list",
+          "cachedResultName": "PR_numbers",
+          "cachedResultUrl": "/projects/PBaY1LVrwPHx7OhB/datatables/2L9rkI1RHIywiQY9"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "PR_number",
+              "keyValue": "={{ $('Github Trigger').item.json.body.number }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        -80
+      ],
+      "id": "31452ff8-5c48-4486-b5a7-1f0e0c4f7d6b",
+      "name": "If row does not exist"
+    },
+    {
+      "parameters": {
+        "resource": "pullRequest",
+        "operation": "get",
+        "pullRequestNumber": "={{ $json.body.issue.number }}",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "list",
+          "cachedResultName": "igorynya",
+          "cachedResultUrl": "https://github.com/igorynya"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        128,
+        384
+      ],
+      "id": "1468007e-736a-440d-9c40-ac64b9110c59",
+      "name": "Get a pull request",
+      "webhookId": "58bddb77-16c3-4881-9b35-e69f1c3cec82",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Github Trigger').first().json.body.comment.body  }}",
+                    "rightValue": "/make_ai_review",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "04c3a7c4-6f2c-4da0-a389-07f082084745"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 4
+                },
+                "conditions": [
+                  {
+                    "id": "81435e71-0b05-4eca-832c-b393a6b1bc73",
+                    "leftValue": "={{ $('Github Trigger').first().json.body.comment.body  }}",
+                    "rightValue": "/make_other_ai_review",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.5,
+      "position": [
+        256,
+        272
+      ],
+      "id": "1cfa849e-721a-48ce-b83a-33287f48ba52",
+      "name": "Switch1"
+    },
+    {
+      "parameters": {
+        "resource": "pullRequest",
+        "operation": "getDiff",
+        "pullRequestNumber": "={{ $('Get a pull request').item.json.number }}",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        512,
+        464
+      ],
+      "id": "829e6c39-dc6c-48e7-bbcb-bfcde00355da",
+      "name": "Get a pull request diff1",
+      "webhookId": "6ca0ab5d-5a72-4d8f-bdc7-687bcc9369ec",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты опытный ревьюер кода. Тебе дают diff pull request. Твоя задача — найти реальные проблемы и дать полезные замечания, а не пересказывать изменения.\n\nЧто проверять, по убыванию важности:\n1. Ошибки и баги: неверная логика, пропущенные граничные случаи, исключения, деление на ноль, пустые списки, неверные индексы.\n2. Безопасность: секреты в коде, инъекции, небезопасная работа с данными.\n3. Поведение и совместимость: изменился ли контракт функции (тип результата, выбрасываемые исключения) и не сломает ли это вызывающий код.\n4. Читаемость и поддерживаемость: имена, дублирование, лишняя сложность.\n5. Тесты: что осталось без проверки.\n\nПравила:\n- Комментируй только то, что видно в diff. Не выдумывай код, которого нет.\n- Каждое замечание должно содержать: где (файл и функция или строка), в чём проблема, чем это грозит и как исправить (коротко, с примером кода, если нужно).\n- Не пиши очевидное и не хвали ради вежливости. Если проблем нет, так и скажи.\n- Если не уверен, помечай замечание как «возможная проблема».\n- Отвечай на русском языке, кратко и по делу.\n\nФормат ответа (Markdown):\n\n## Ревью PR\n**Общий вывод:** 1–2 предложения: можно ли мёрджить.\n\n### Критичные\n- `файл`, `функция/строка`: проблема → предложение.\n\n### Важные\n- ...\n\n### Мелкие замечания\n- ...\n\nПустые разделы не выводи.\n\nвот сам diff: {{ $json.diff }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        752,
+        576
+      ],
+      "id": "1c444e50-b130-4de9-8a1b-326c2db242bd",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "id"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        720,
+        752
+      ],
+      "id": "102e2987-6caf-48f1-ab9c-a0e6f3ca6729",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "JvVWoVvadg9Gxz9T",
+          "name": "OpenAI account 22"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pullRequest",
+        "operation": "createComment",
+        "pullRequestNumber": "={{ $('Get a pull request').item.json.number }}",
+        "body": "={{ $json.output }}",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1104,
+        432
+      ],
+      "id": "505ddbd1-ea21-4af5-bcd2-c79744e8d8e7",
+      "name": "Create a comment on a pull request1",
+      "webhookId": "b3a7c6f7-22e4-4eb4-b034-ebb461ce67b9",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "rowNotExists",
+        "dataTableId": {
+          "__rl": true,
+          "value": "2L9rkI1RHIywiQY9",
+          "mode": "list",
+          "cachedResultName": "PR_numbers",
+          "cachedResultUrl": "/projects/PBaY1LVrwPHx7OhB/datatables/2L9rkI1RHIywiQY9"
+        },
+        "filters": {
+          "conditions": [
+            {
+              "keyName": "PR_number",
+              "keyValue": "={{ $('Get a pull request').item.json.number }}"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        416,
+        224
+      ],
+      "id": "3940660a-c7de-448f-97b3-8fe5d8d73ff9",
+      "name": "If row does not exist1"
+    },
+    {
+      "parameters": {
+        "resource": "pullRequest",
+        "operation": "getDiff",
+        "pullRequestNumber": "={{ $json.PR_number }}",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        784,
+        288
+      ],
+      "id": "89f42f65-9dd5-45cf-abf5-8063853eeb39",
+      "name": "Get a pull request diff2",
+      "webhookId": "6ca0ab5d-5a72-4d8f-bdc7-687bcc9369ec",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "dataTableId": {
+          "__rl": true,
+          "value": "2L9rkI1RHIywiQY9",
+          "mode": "list",
+          "cachedResultName": "PR_numbers",
+          "cachedResultUrl": "/projects/PBaY1LVrwPHx7OhB/datatables/2L9rkI1RHIywiQY9"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "PR_number": "={{ $json.number }}"
+          },
+          "matchingColumns": [
+            "PR_number"
+          ],
+          "schema": [
+            {
+              "id": "PR_number",
+              "displayName": "PR_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "readOnly": false,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.dataTable",
+      "typeVersion": 1.1,
+      "position": [
+        576,
+        256
+      ],
+      "id": "d1fa0fb4-68b1-4bef-9b7a-93ecafa4a726",
+      "name": "Insert row1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=Ты опытный ревьюер кода. Тебе дают diff pull request. Твоя задача — найти реальные проблемы и дать полезные замечания, а не пересказывать изменения.\n\nЧто проверять, по убыванию важности:\n1. Ошибки и баги: неверная логика, пропущенные граничные случаи, исключения, деление на ноль, пустые списки, неверные индексы.\n2. Безопасность: секреты в коде, инъекции, небезопасная работа с данными.\n3. Поведение и совместимость: изменился ли контракт функции (тип результата, выбрасываемые исключения) и не сломает ли это вызывающий код.\n4. Читаемость и поддерживаемость: имена, дублирование, лишняя сложность.\n5. Тесты: что осталось без проверки.\n\nПравила:\n- Комментируй только то, что видно в diff. Не выдумывай код, которого нет.\n- Каждое замечание должно содержать: где (файл и функция или строка), в чём проблема, чем это грозит и как исправить (коротко, с примером кода, если нужно).\n- Не пиши очевидное и не хвали ради вежливости. Если проблем нет, так и скажи.\n- Если не уверен, помечай замечание как «возможная проблема».\n- Отвечай на русском языке, кратко и по делу.\n\nФормат ответа (Markdown):\n\n## Ревью PR\n**Общий вывод:** 1–2 предложения: можно ли мёрджить.\n\n### Критичные\n- `файл`, `функция/строка`: проблема → предложение.\n\n### Важные\n- ...\n\n### Мелкие замечания\n- ...\n\nПустые разделы не выводи.\n\nвот сам diff: {{ $json.diff }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        1328,
+        96
+      ],
+      "id": "20e664cf-05f4-4fe8-bcf9-c656e647fac0",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "id"
+        },
+        "responsesApiEnabled": false,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        1376,
+        336
+      ],
+      "id": "338c70aa-6a61-4796-8aea-1e42ce19d9ab",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "JvVWoVvadg9Gxz9T",
+          "name": "OpenAI account 22"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "pullRequest",
+        "operation": "createComment",
+        "pullRequestNumber": "={{ $('Insert row1').item.json.PR_number }}",
+        "body": "={{ $json.output }}",
+        "owner": {
+          "__rl": true,
+          "value": "igorynya",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "n8n-review-test",
+          "mode": "list",
+          "cachedResultName": "n8n-review-test",
+          "cachedResultUrl": "https://github.com/igorynya/n8n-review-test"
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1648,
+        112
+      ],
+      "id": "d3211af4-3382-4b26-9089-8fe0e1225302",
+      "name": "Create a comment on a pull request2",
+      "webhookId": "b3a7c6f7-22e4-4eb4-b034-ebb461ce67b9",
+      "credentials": {
+        "githubApi": {
+          "id": "HRlTQfdfQUJbA3Rc",
+          "name": "GitHub account 26"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "If row does not exist",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a pull request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Create a comment on a pull request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Github Trigger": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a pull request diff": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row": {
+      "main": [
+        [
+          {
+            "node": "Get a pull request diff",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If row does not exist": {
+      "main": [
+        [
+          {
+            "node": "Insert row",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a pull request": {
+      "main": [
+        [
+          {
+            "node": "Switch1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch1": {
+      "main": [
+        [
+          {
+            "node": "If row does not exist1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get a pull request diff1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a pull request diff1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Create a comment on a pull request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If row does not exist1": {
+      "main": [
+        [
+          {
+            "node": "Insert row1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Insert row1": {
+      "main": [
+        [
+          {
+            "node": "Get a pull request diff2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Create a comment on a pull request2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get a pull request diff2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "692edabd-e267-4a0b-abc0-9dd1573cc6d7",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "68dbbb4e8fa686c3fd4e9982ade6836edb66976f207553e7ac22df961581c78c"
+  },
+  "nodeGroups": [],
+  "id": "X1prUWRaKdFLCTF6",
+  "tags": []
+}
