@@ -1,0 +1,363 @@
+{
+  "generated_at": "2026-10-24T20:28:44.448Z",
+  "base": "http://127.0.0.1:18081",
+  "known_tag": "ужин",
+  "checks": [
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "строка чипов видна, «Все» первый",
+      "pass": true,
+      "detail": "tag-bar visible"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "изначально активен только «Все»",
+      "pass": true,
+      "detail": "active="
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "во время загрузки чипы недоступны",
+      "pass": true,
+      "detail": "aria-disabled на всех чипах, refresh disabled"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "во время загрузки в статусе назван тег",
+      "pass": true,
+      "detail": "Загружаем подборки по тегу «ужин»…"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "после успеха только подборки с тегом",
+      "pass": true,
+      "detail": "6 карточек, все с «ужин»"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "активен ровно один чип",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "карточек не больше 12",
+      "pass": true,
+      "detail": "6 карточек"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "список тегов не сужен фильтром",
+      "pass": true,
+      "detail": "22 -> 22"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "«Ещё подборки» сохраняет фильтр",
+      "pass": true,
+      "detail": "active=ужин, tagged requests=1"
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "повторный клик по активному чипу сбрасывает фильтр",
+      "pass": true,
+      "detail": "active="
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "кнопка «Все» сбрасывает фильтр",
+      "pass": true,
+      "detail": "active="
+    },
+    {
+      "scenario": "4.1 основной сценарий",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.2 пустота",
+      "check": "пустое состояние с названием тега",
+      "pass": true,
+      "detail": "По тегу «ужин» ничего не найдено"
+    },
+    {
+      "scenario": "4.2 пустота",
+      "check": "есть кнопка «Сбросить фильтр»",
+      "pass": true,
+      "detail": "Сбросить фильтр"
+    },
+    {
+      "scenario": "4.2 пустота",
+      "check": "сброс возвращает «Все» и фокус на «Все»",
+      "pass": true,
+      "detail": "active=, focus="
+    },
+    {
+      "scenario": "4.2 пустота",
+      "check": "после сброса показаны подборки",
+      "pass": true,
+      "detail": "12 карточек"
+    },
+    {
+      "scenario": "4.2 пустота",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.3 ошибка и повтор",
+      "check": "сетевая ошибка: сообщение с тегом и «Повторить»",
+      "pass": true,
+      "detail": "Не удалось загрузить подборки по тегу «ужин». Попробуйте ещё раз. / Повторить"
+    },
+    {
+      "scenario": "4.3 ошибка и повтор",
+      "check": "после ошибки чипы снова доступны",
+      "pass": true,
+      "detail": "aria-disabled=false"
+    },
+    {
+      "scenario": "4.3 ошибка и повтор",
+      "check": "выбранный чип остаётся активным",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.3 ошибка и повтор",
+      "check": "«Повторить» возвращает успех",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.3 ошибка и повтор",
+      "check": "400: текст без кода и поля, действие «Сбросить фильтр»",
+      "pass": true,
+      "detail": "Не удалось применить фильтр. / Сбросить фильтр"
+    },
+    {
+      "scenario": "4.3 ошибка и повтор",
+      "check": "после 400 сброс загружает все подборки",
+      "pass": true,
+      "detail": "active="
+    },
+    {
+      "scenario": "4.3 ошибка и повтор",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.4 избранное",
+      "check": "добавление в избранное под фильтром не сбрасывает фильтр",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.4 избранное",
+      "check": "на «Избранном» чипы скрыты, показаны все избранные",
+      "pass": true,
+      "detail": "1 карточек"
+    },
+    {
+      "scenario": "4.4 избранное",
+      "check": "счётчик избранного не изменился",
+      "pass": true,
+      "detail": "1"
+    },
+    {
+      "scenario": "4.4 избранное",
+      "check": "при возврате тег восстановлен",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.4 избранное",
+      "check": "после «Ещё подборки» на избранном тег сохранён",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.4 избранное",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "Tab идёт по чипам в визуальном порядке",
+      "pass": true,
+      "detail": "белок -> быстро -> бюджет -> вегетарианское -> вечер -> выходные -> десерт -> дети -> домашнее -> дорога -> завтрак -> здоровое -> компания -> кофе -> обед -> паста -> перекус -> пикник -> свидание -> суп -> ужин"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "Shift+Tab возвращает назад",
+      "pass": true,
+      "detail": "focus=суп"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "у всех чипов aria-pressed true/false",
+      "pass": true,
+      "detail": "true,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false,false"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "у чипа видимая рамка фокуса",
+      "pass": true,
+      "detail": "solid 3px"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "Enter активирует чип",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "Space активирует чип",
+      "pass": true,
+      "detail": "active="
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "во время загрузки чипы недоступны и остаются в Tab-порядке",
+      "pass": true,
+      "detail": "[{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0},{\"disabled\":\"true\",\"tabIndex\":0}]"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "повторное нажатие во время загрузки не запускает запрос",
+      "pass": true,
+      "detail": "requests=1"
+    },
+    {
+      "scenario": "4.5 клавиатура",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.6 мобильная ширина",
+      "check": "строка чипов в одну строку с прокруткой",
+      "pass": true,
+      "detail": "{\"scrollWidth\":2252,\"clientWidth\":320,\"flexWrap\":\"nowrap\",\"docScrollWidth\":320,\"innerWidth\":320}"
+    },
+    {
+      "scenario": "4.6 мобильная ширина",
+      "check": "страница без горизонтальной прокрутки",
+      "pass": true,
+      "detail": "doc=320, viewport=320"
+    },
+    {
+      "scenario": "4.6 мобильная ширина",
+      "check": "«Все» остаётся первым",
+      "pass": true,
+      "detail": "Все"
+    },
+    {
+      "scenario": "4.6 мобильная ширина",
+      "check": "последний чип достижим прокруткой",
+      "pass": true,
+      "detail": "scrollLeft=1932"
+    },
+    {
+      "scenario": "4.6 мобильная ширина",
+      "check": "фокус прокручивает строку к чипу",
+      "pass": true,
+      "detail": "scrollLeft=1932"
+    },
+    {
+      "scenario": "4.6 мобильная ширина",
+      "check": "свайп по строке не меняет фильтр",
+      "pass": true,
+      "detail": " -> "
+    },
+    {
+      "scenario": "4.6 мобильная ширина",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.7 карточки, избранное и корзина",
+      "check": "избранное обновилось, фильтр не сброшен",
+      "pass": true,
+      "detail": "active=ужин, count=1"
+    },
+    {
+      "scenario": "4.7 карточки, избранное и корзина",
+      "check": "корзина открывается по прежней ссылке",
+      "pass": true,
+      "detail": "https://vkusvill.ru/mobile?basket&share=4"
+    },
+    {
+      "scenario": "4.7 карточки, избранное и корзина",
+      "check": "фильтр не сломан после корзины",
+      "pass": true,
+      "detail": "active=ужин"
+    },
+    {
+      "scenario": "4.7 карточки, избранное и корзина",
+      "check": "после возврата фильтр восстановлен, избранное не потеряно",
+      "pass": true,
+      "detail": "active=ужин, count=1"
+    },
+    {
+      "scenario": "4.7 карточки, избранное и корзина",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.8 пустой список тегов",
+      "check": "в строке остаётся только «Все»",
+      "pass": true,
+      "detail": "1 чипов"
+    },
+    {
+      "scenario": "4.8 пустой список тегов",
+      "check": "фильтр не применяется, подборки показаны",
+      "pass": true,
+      "detail": "active=, cards=12"
+    },
+    {
+      "scenario": "4.8 пустой список тегов",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    },
+    {
+      "scenario": "4.9 автосброс устаревшего тега",
+      "check": "показано уведомление об автосбросе",
+      "pass": true,
+      "detail": "Тег больше недоступен, фильтр сброшен"
+    },
+    {
+      "scenario": "4.9 автосброс устаревшего тега",
+      "check": "фильтр сброшен на «Все»",
+      "pass": true,
+      "detail": "active=, cards=12"
+    },
+    {
+      "scenario": "4.9 автосброс устаревшего тега",
+      "check": "пустота с именем исчезнувшего тега не показана",
+      "pass": true,
+      "detail": ""
+    },
+    {
+      "scenario": "4.9 автосброс устаревшего тега",
+      "check": "уведомление скрывается примерно через 5 секунд",
+      "pass": true,
+      "detail": "notice hidden"
+    },
+    {
+      "scenario": "4.9 автосброс устаревшего тега",
+      "check": "нет ошибок страницы",
+      "pass": true,
+      "detail": "none"
+    }
+  ],
+  "passed": 59,
+  "failed": 0
+}

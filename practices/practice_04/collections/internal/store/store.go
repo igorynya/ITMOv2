@@ -168,14 +168,11 @@ func (s *Store) SaveGeneration(ctx context.Context, generation int64, cols []dom
 	return nil
 }
 
-func (s *Store) SampleActive(ctx context.Context, limit int) ([]domain.Collection, error) {
-	if limit <= 0 {
-		return []domain.Collection{}, nil
-	}
+func (s *Store) ActivePool(ctx context.Context) ([]domain.Collection, error) {
 	rows, err := s.db.QueryContext(ctx, collectionSelect+`
-		WHERE active = 1 ORDER BY RANDOM() LIMIT ?`, limit)
+		WHERE active = 1`)
 	if err != nil {
-		return nil, fmt.Errorf("sample collections: %w", err)
+		return nil, fmt.Errorf("load active collections: %w", err)
 	}
 	defer rows.Close()
 	return scanCollections(rows)
