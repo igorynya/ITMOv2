@@ -1,0 +1,13 @@
+{
+  "name": "04_price_tampering",
+  "title": "Подмена цены клиентом",
+  "request": "POST /orders {product:chair, price:-1} с токеном alice",
+  "status": 201,
+  "response": {
+    "id": 3,
+    "owner": 1,
+    "product": "chair",
+    "price": -1
+  },
+  "verdict": "Заказ создан с ценой, заданной клиентом (-1)"
+}

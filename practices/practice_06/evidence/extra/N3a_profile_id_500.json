@@ -1,0 +1,10 @@
+{
+  "name": "N3a_profile_id_500",
+  "finding": "Пробел в валидации id: 500 вместо 400",
+  "probe": "GET /profile?id=--5 (staff)",
+  "status": 500,
+  "response": {
+    "error": "internal error"
+  },
+  "verdict": "ПОДТВЕРЖДЕНО: 500 (int('--5') падает)"
+}

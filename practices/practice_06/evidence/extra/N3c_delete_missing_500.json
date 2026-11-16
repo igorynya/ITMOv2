@@ -1,0 +1,10 @@
+{
+  "name": "N3c_delete_missing_500",
+  "finding": "delete_tree по несуществующему пути -> 500",
+  "probe": "staff execute delete_tree path='nope'",
+  "status": 500,
+  "response": {
+    "error": "internal error"
+  },
+  "verdict": "ПОДТВЕРЖДЕНО: 500 (FileNotFoundError)"
+}

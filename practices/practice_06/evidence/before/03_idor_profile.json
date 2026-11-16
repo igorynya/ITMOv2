@@ -1,0 +1,15 @@
+{
+  "name": "03_idor_profile",
+  "title": "IDOR: чужой профиль без токена",
+  "request": "GET /profile?id=2 (без X-Token) — профиль Боба",
+  "status": 200,
+  "response": [
+    {
+      "id": 2,
+      "name": "TEST_BOB",
+      "email": "bob@example.invalid",
+      "address": "TEST_ADDRESS_B"
+    }
+  ],
+  "verdict": "Чужие ПДн отданы без аутентификации"
+}

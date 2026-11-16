@@ -1,0 +1,10 @@
+{
+  "name": "06_files_idor",
+  "title": "IDOR в /files: чужой чек",
+  "request": "GET /files?user=bob&path=receipt.txt (токен alice)",
+  "status": 200,
+  "response": {
+    "content": "TEST_BOB receipt: lamp, 1500 RUB"
+  },
+  "verdict": "Alice читает чек Боба"
+}

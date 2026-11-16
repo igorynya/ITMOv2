@@ -1,0 +1,10 @@
+{
+  "name": "N6_staff_blocked",
+  "finding": "N6 staff не сносит чужие файлы",
+  "probe": "staff delete_tree path='alice'",
+  "status": 404,
+  "response": {
+    "error": "path not found"
+  },
+  "verdict": "FIX: 404 — путь вне своего каталога, данные Alice целы"
+}

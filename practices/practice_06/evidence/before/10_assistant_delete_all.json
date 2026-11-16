@@ -1,0 +1,10 @@
+{
+  "name": "10_assistant_delete_all",
+  "title": "Разрушение всех файлов стенда без токена",
+  "request": "POST /assistant/execute delete_tree path='.' (без токена)",
+  "status": 200,
+  "response": {
+    "deleted": "."
+  },
+  "verdict": "Удалено всё дерево файлов стенда (восстанавливается рестартом)"
+}

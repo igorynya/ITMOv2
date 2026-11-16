@@ -1,0 +1,10 @@
+{
+  "name": "11_malformed_body",
+  "vuln": "V12",
+  "attack": "execute без decision",
+  "status": 400,
+  "response": {
+    "error": "decision.tool required"
+  },
+  "outcome": "BLOCK: 400 вместо 500"
+}

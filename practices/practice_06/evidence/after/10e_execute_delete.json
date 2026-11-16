@@ -1,0 +1,10 @@
+{
+  "name": "10e_execute_delete",
+  "vuln": "V11",
+  "attack": "alice execute delete_tree path='.'",
+  "status": 403,
+  "response": {
+    "error": "staff only"
+  },
+  "outcome": "BLOCK: 403 staff only"
+}

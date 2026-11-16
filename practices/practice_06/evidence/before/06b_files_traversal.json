@@ -1,0 +1,10 @@
+{
+  "name": "06b_files_traversal",
+  "title": "Обход пути к служебной заметке",
+  "request": "GET /files?user=..&path=private/operator-note.txt (без токена)",
+  "status": 200,
+  "response": {
+    "content": "TEST_ONLY_OPERATOR_SECRET"
+  },
+  "verdict": "Прочитан секрет оператора внутри песочницы"
+}

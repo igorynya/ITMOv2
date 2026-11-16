@@ -1,0 +1,10 @@
+{
+  "name": "06b_files_traversal",
+  "vuln": "V7",
+  "attack": "GET /files traversal к секрету (alice)",
+  "status": 400,
+  "response": {
+    "error": "only receipt.txt is available"
+  },
+  "outcome": "BLOCK: 400, только receipt.txt"
+}

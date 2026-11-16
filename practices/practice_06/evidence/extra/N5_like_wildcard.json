@@ -1,0 +1,21 @@
+{
+  "name": "N5_like_wildcard",
+  "finding": "Небезопасные подстановочные символы LIKE в /search",
+  "probe": "GET /search?q=_ (staff) — '_' как SQL-wildcard",
+  "status": 200,
+  "response": [
+    {
+      "id": 1,
+      "name": "TEST_ALICE",
+      "email": "alice@example.invalid",
+      "address": "TEST_ADDRESS_A"
+    },
+    {
+      "id": 2,
+      "name": "TEST_BOB",
+      "email": "bob@example.invalid",
+      "address": "TEST_ADDRESS_B"
+    }
+  ],
+  "verdict": "НИЗКО: '_'/'%' трактуются как шаблон LIKE (у staff и так весь доступ; у клиента скоуп по своему id)"
+}

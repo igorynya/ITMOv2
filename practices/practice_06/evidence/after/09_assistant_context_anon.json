@@ -1,0 +1,10 @@
+{
+  "name": "09_assistant_context_anon",
+  "vuln": "V10",
+  "attack": "GET /assistant/context без токена",
+  "status": 401,
+  "response": {
+    "error": "login required"
+  },
+  "outcome": "BLOCK: 401"
+}

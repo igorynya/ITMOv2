@@ -1,0 +1,10 @@
+{
+  "name": "01b_sqli_profile_union",
+  "vuln": "V1",
+  "attack": "UNION через staff-сессию",
+  "status": 400,
+  "response": {
+    "error": "id must be integer"
+  },
+  "outcome": "BLOCK: 400, запрос параметризован"
+}

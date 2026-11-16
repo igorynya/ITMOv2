@@ -1,0 +1,10 @@
+{
+  "name": "N3b_nondict_body_500",
+  "finding": "Тело-не-объект -> 500 (AttributeError)",
+  "probe": "POST /login телом JSON-массив [1,2,3]",
+  "status": 500,
+  "response": {
+    "error": "internal error"
+  },
+  "verdict": "ПОДТВЕРЖДЕНО: 500 на не-dict теле"
+}

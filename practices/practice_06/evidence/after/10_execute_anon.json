@@ -1,0 +1,10 @@
+{
+  "name": "10_execute_anon",
+  "vuln": "V11",
+  "attack": "execute read_file без токена",
+  "status": 401,
+  "response": {
+    "error": "login required"
+  },
+  "outcome": "BLOCK: 401"
+}

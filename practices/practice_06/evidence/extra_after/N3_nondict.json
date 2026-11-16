@@ -1,0 +1,8 @@
+{
+  "name": "N3_nondict",
+  "finding": "N3 тело-не-объект",
+  "probe": "POST /login телом [1,2,3]",
+  "status": 400,
+  "response": {},
+  "verdict": "FIX: 400"
+}

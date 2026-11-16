@@ -1,0 +1,10 @@
+{
+  "name": "03b_idor_orders",
+  "vuln": "V4",
+  "attack": "GET /orders без токена",
+  "status": 401,
+  "response": {
+    "error": "login required"
+  },
+  "outcome": "BLOCK: 401"
+}

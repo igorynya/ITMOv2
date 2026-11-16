@@ -1,0 +1,10 @@
+{
+  "name": "09b_assistant_context_foreign",
+  "vuln": "V10",
+  "attack": "alice просит order_id=2 (Боба)",
+  "status": 404,
+  "response": {
+    "error": "order not found"
+  },
+  "outcome": "BLOCK: 404 чужой заказ"
+}

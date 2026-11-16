@@ -1,0 +1,10 @@
+{
+  "name": "03_idor_profile",
+  "vuln": "V4",
+  "attack": "GET /profile?id=2 без токена",
+  "status": 401,
+  "response": {
+    "error": "login required"
+  },
+  "outcome": "BLOCK: 401"
+}

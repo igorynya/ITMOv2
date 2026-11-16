@@ -1,0 +1,10 @@
+{
+  "name": "05_role_header_escalation",
+  "vuln": "V6",
+  "attack": "GET /admin/export c X-Role: staff без сессии",
+  "status": 403,
+  "response": {
+    "error": "staff only"
+  },
+  "outcome": "BLOCK: 403, заголовок роли игнорируется"
+}
