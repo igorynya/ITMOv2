@@ -1,0 +1,16 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "cVciSTGiE2t47PXujw_o_"
+uri = "file://food-collections-prototype-report.md"
+type = "text"
+title = "Отчёт по прототипу «Подборки продуктов»"
+description = "Русский Markdown-отчёт: стек и компоненты, хронология, состояния, стили и исходники."
+logical_id = "bcc17d50-a61b-4899-a155-8f4820fe6eb9"
+content_hash = "sha256:7e495a0690b7bd62959cc9930de6b45f456fa9905398243147bd35b5cfad7b6e"
+size = 12927
+mtime_ms = 1794930025340
+storage_uri = "gcs://replit-rams-assets-kira/rams/assets/repl:29dfcec2-5df7-4b33-b5fd-ca0058068683/bcc17d50-a61b-4899-a155-8f4820fe6eb9/002ace5c-7aae-458b-b3b1-fabb92e185c6"
+storage_version_token = "1794930058040972"
+content_type = "text/markdown"

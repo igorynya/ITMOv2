@@ -1,0 +1,66 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Токены оформления. Значения взяты из макета (mockup/REPORT.md, раздел 8). */
+@theme inline {
+  --color-background: #fbfbf6;
+  --color-foreground: #122017;
+  --color-card: #ffffff;
+  --color-card-foreground: #122017;
+  --color-primary: #1b7a3d;
+  --color-primary-foreground: #ffffff;
+  --color-accent: #d8f26b;
+  --color-accent-foreground: #122017;
+  --color-secondary: #eef0e4;
+  --color-secondary-foreground: #122017;
+  --color-muted: #eef0e4;
+  --color-muted-foreground: #5b675f;
+  --color-destructive: #e24a2a;
+  --color-destructive-foreground: #a8321c;
+  --color-border: #d8dccf;
+  --color-input: #d8dccf;
+  --color-ring: #1b7a3d;
+
+  /* Радиусы вынесены в токены (в прототипе были числами в CSS). */
+  --radius-field: 14px;
+  --radius-panel: 16px;
+  --radius-card: 22px;
+  --radius-pill: 999px;
+
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Минимальный размер элементов управления (правило 18 spec.md). */
+  --size-control: 2.75rem;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html {
+    font-family: var(--font-sans);
+  }
+  body {
+    margin: 0;
+    background: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Видимый индикатор фокуса (правило 17). */
+  :focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+  }
+}
+
+/* Правило 19: без анимаций при prefers-reduced-motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
